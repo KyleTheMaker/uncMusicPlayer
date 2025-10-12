@@ -1,7 +1,10 @@
-/*
-This component takes in all saved songs from a database
-currently it has all songs fron assets listed
-
+/**
+ * 
+ * 
+ * This component takes in all saved songs from a database
+ * currently it has all songs fron assets listed
+ * 
+ * 
 */
 
 import { StyleSheet, Text, View, FlatList } from "react-native";

@@ -1,3 +1,13 @@
+/**
+ * ***Component Information***
+ * Licence/Royalty Free Music Source: https://pixabay.com/
+ * Audio sources should be provided by parent
+ * Song name should also come from parent.
+ * Media Player component displays track info and allows track control
+ * 
+ * 
+ * 
+ */
 import { StyleSheet, Text, View, Button, Pressable, Alert } from "react-native";
 import { useState } from "react";
 import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
@@ -15,16 +25,8 @@ const songNames = [
   "Unstoppable Dance",
 ];
 
-{
-  /*
-  ***Component Information***
-  Licence/Royalty Free Music Source: https://pixabay.com/
-  Audio sources should be provided by parent
-  Song name should also come from parent.
-  Media Player component displays track info and allows track control
-  
-*/
-}
+
+
 const MediaPlayer = () => {
   const [songPosition, setSongPosition] = useState(0);
   const player = useAudioPlayer(audioSources[songPosition]);

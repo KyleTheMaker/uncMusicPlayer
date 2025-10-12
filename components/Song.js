@@ -1,6 +1,10 @@
-/*
-This component is for a selectable song item
-the image is for add/remove selections
+/**
+ * 
+ * 
+ * This component is for a selectable song item
+ * the image is for add/remove selections
+ * 
+ * 
 */
 
 import { useState } from "react";

@@ -1,8 +1,13 @@
-/*
-This Component adds or removes songs for custom playlist
-Currently useState array for managing the playlist
-Long term should use database for custom playlists
-*/
+/**
+ * 
+ * This Component is is to display the playList
+ *  Currently useState array for managing the playlist
+ *  Long term should use database for custom playlists
+ * 
+ * 
+ * 
+ *
+ */
 
 import {
   StyleSheet,

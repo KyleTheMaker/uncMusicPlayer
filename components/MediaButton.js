@@ -1,3 +1,12 @@
+/**
+ * 
+ * 
+ * Button style for song control
+ * used in Media Player
+ * 
+ * 
+ */
+
 import { StyleSheet, Text, View, Pressable, Alert } from "react-native";
 
 const MediaButton = (props) => {
