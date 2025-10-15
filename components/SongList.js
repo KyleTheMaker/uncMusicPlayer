@@ -2,7 +2,8 @@
  *
  *
  * This component takes in all saved songs from a database
- * currently it has all songs fron assets listed
+ * Song's longpress opens an action button - that action button
+ * adds the selected song to the database
  *
  *
  */
@@ -13,11 +14,6 @@ import { useState, useEffect } from "react";
 import Song from "./Song";
 
 {
-  /*
-***Component Information***
-Song list should be provided by parent
-add to playlist pressable should be handled by parent via hook
-*/
 }
 const SongList = () => {
   const db = useSQLiteContext();

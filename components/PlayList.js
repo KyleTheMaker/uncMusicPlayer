@@ -1,10 +1,9 @@
 /**
  *
  * This Component is is to display the playList
- *  Currently useState array for managing the playlist
- *  Long term should use database for custom playlists
- *
- *
+ * PlayList data should be provided by database
+ * longpressing song in playlist will enable button - 
+ * that button removes song from playlist (remove from playlist table)
  *
  *
  */
@@ -13,38 +12,24 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity,
   Pressable,
-  FlatList
+  FlatList,
 } from "react-native";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState, useEffect } from "react";
 import Song from "./Song";
 
-{
-  /*
-***Component Information***
-Song list should be provided by parent
-remove pressable should be handled by parent via hook
-// get all songs from playlist table and list in playlist component
-//longpressing song in playlist will enable button to remove from playlist (remove from playlist table)
-*/
-}
-const PlayList = () => {
-  const [listPlaylist, addPlaylist] = useState([
-    { id: 0, name: "Fuzzy Cats and Mushrooms" },
-    { id: 1, name: "Peaceful Lofi" },
-    { id: 2, name: "Unstoppable Dance" },
-  ]);
 
+const PlayList = () => {
   const db = useSQLiteContext();
   const [songsList, setSongsList] = useState([]);
 
-  //we're getting all songs from playlist table and display in flatlist
+  //we're getting all songs from playlist table to display in a flatlist
   useEffect(() => {
     const loadSongs = async () => {
       try {
         const allSongs = await db.getAllAsync("SELECT * FROM playlist");
+
         //confirm data in logs
         console.log("Fetched Playlist Songs:", allSongs);
 
@@ -67,14 +52,6 @@ const PlayList = () => {
         )}
         keyExtractor={(song) => song.id.toString()}
       />
-      {/* {listPlaylist.map((song) => (
-        <Song
-          key={song.id}
-          song={song.name}
-          remove={styles.addRemove}
-          actionText={"Remove Song"}
-        />
-      ))} */}
     </View>
   );
 };
