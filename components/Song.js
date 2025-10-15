@@ -28,10 +28,10 @@ const Song = (props) => {
         onLongPress={() => {
           setVisible(!isVisible);
         }}
-        onPressIn={HandlePressIn}
+        onPressOut={PlaySelectedSong}
       >
         {isVisible && (
-          <Pressable style={styles.pressRemove}>
+          <Pressable style={styles.pressRemove} onPressOut={actionSelectedSong}>
             <Text>{props.actionText}</Text>
           </Pressable>
         )}
@@ -41,7 +41,9 @@ const Song = (props) => {
   );
 };
 
-const HandlePressIn = () => {};
+//play the selected song on the music player
+const PlaySelectedSong = () => {};
+const actionSelectedSong = () => {};
 
 const styles = StyleSheet.create({
   songItem: {
