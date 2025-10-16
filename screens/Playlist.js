@@ -4,7 +4,7 @@ import { View, Text, StyleSheet } from 'react-native';
 export default function PlaylistScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>This is the About Screen.</Text>
+      <Text style={styles.text}>This is the Playlist Screen.</Text>
     </View>
   );
 }
