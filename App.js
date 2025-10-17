@@ -1,7 +1,9 @@
 /** uncMusicPlayer
  *
  *
- * The only functional component is the MediaPlayer
+ * The MediaPlayer Component handles song control and information
+ * SongList lists all songs from the database
+ * Playlist lists
  * Longpressing a song name opens the button intended for
  * adding or removing a song from a playlist/songlist
  *
