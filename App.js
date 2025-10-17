@@ -1,3 +1,20 @@
+/** uncMusicPlayer
+ *
+ *
+ * The MediaPlayer Component handles song control and information
+ * SongList lists all songs from the database
+ * Playlist lists
+ * Longpressing a song name opens the button intended for
+ * adding or removing a song from a playlist/songlist
+ *
+ * TODO:
+ * X - List all songs from songlist table into songlist component
+ * X - list all songs from playlist table into playlist component
+ *  - Songlist Longpress function inserts selected song into playlist table
+ *  - Playlist Longpress function removes selected song from playlist table
+ *
+ *
+ */
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';

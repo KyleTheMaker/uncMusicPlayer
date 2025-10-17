@@ -1,23 +1,19 @@
 /**
- * 
- * 
+ *
+ *
+ * ***Component Information***
  * This component is for a selectable song item
- * the image is for add/remove selections
- * 
- * 
-*/
+ * Song should get its pressable text from parent list
+ * parent list dictates if Long Press should be add or remove
+ * Currently action pressable has actionSelectedSong as pressOut function
+ * Main song Pressable uses playSelectedSong function for onPressOut
+ *
+ *
+ */
 
 import { useState } from "react";
-import { Pressable, Text, Image, StyleSheet, View } from "react-native";
+import { Pressable, Text, Image, StyleSheet, View, Alert } from "react-native";
 
-{
-  /*
-  ***Component Information***
-Song should get its pressable text from parent list
-parent list dictates if Long Press should be add or remove 
-
-*/
-}
 const Song = (props) => {
   const [isSelected, setIsSelected] = useState("#ffa");
   const [isVisible, setVisible] = useState(false);
@@ -28,20 +24,33 @@ const Song = (props) => {
         onLongPress={() => {
           setVisible(!isVisible);
         }}
-        onPressIn={HandlePressIn}
+        onPressOut={() => {
+          props.playSong(props.songLocation);
+        }}
       >
         {isVisible && (
-          <Pressable style={styles.pressRemove}>
+          <Pressable
+            style={styles.pressRemove}
+            onPressOut={() => {
+              props.actionFunction(props.songName, props.songLocation);
+              Alert.alert(props.actionText+" "+props.songName);
+            }}
+          >
             <Text>{props.actionText}</Text>
           </Pressable>
         )}
-        <Text>{props.song}</Text>
+        <Text>{props.songName}</Text>
       </Pressable>
     </View>
   );
 };
 
-const HandlePressIn = () => {};
+//this needs to send song location to mediaPlayer
+const playSelectedSong = () => {
+  const songToPlay = props.songLocation;
+};
+//this has special action based on parent - add or remove song
+const actionSelectedSong = () => {};
 
 const styles = StyleSheet.create({
   songItem: {

@@ -1,9 +1,13 @@
 /**
  * ***Component Information***
  * Licence/Royalty Free Music Source: https://pixabay.com/
- * Audio sources should be provided by parent
- * Song name should also come from parent.
  * Media Player component displays track info and allows track control
+ * Tracks are currently hardcoded into the media player
+ * ideally tracks come from database
+ * 
+ * TODO:
+ *  - Audio sources should be provided by parent (database?)
+ *  - Song name should also come from parent (database?)
  * 
  * 
  * 
