@@ -2,44 +2,44 @@
  *
  * This Component is is to display the playList
  * PlayList data should be provided by database
- * longpressing song in playlist will enable button - 
+ * longpressing song in playlist will enable button -
  * that button removes song from playlist (remove from playlist table)
  *
  *
  */
 
-import {
-  StyleSheet,
-  Text,
-  View,
-  Pressable,
-  FlatList,
-} from "react-native";
+import { StyleSheet, Text, View, Pressable, FlatList } from "react-native";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState, useEffect } from "react";
+import { getPlayListSongs } from "../data/musicdb";
+
+import { removeSongFromPlaylist } from "../data/musicdb";
 import Song from "./Song";
 
-
-const PlayList = () => {
+const PlayList = (props) => {
   const db = useSQLiteContext();
   const [songsList, setSongsList] = useState([]);
+  const [playSong, setPlaySong] = useState("");
 
   //we're getting all songs from playlist table to display in a flatlist
   useEffect(() => {
     const loadSongs = async () => {
-      try {
-        const allSongs = await db.getAllAsync("SELECT * FROM playlist");
-
-        //confirm data in logs
-        console.log("Fetched Playlist Songs:", allSongs);
-
-        setSongsList(allSongs);
-      } catch (error) {
-        console.error("Failed to fetch songs:", error);
-      }
+      const allSongs = await getPlayListSongs(db);
+      //confirm data in logs
+      console.log("Fetched Playlist Songs:", allSongs);
+      setSongsList(allSongs);
     };
     loadSongs();
   }, [db]);
+
+    const handleRemoveSong = async (name) => {
+    await removeSongFromPlaylist(db, name);
+  };
+
+  function setSong(song) {
+    setPlaySong(song);
+    props.playSong(playSong);
+  }
 
   return (
     <View style={styles.playlist}>
@@ -48,7 +48,13 @@ const PlayList = () => {
         style={{ flex: 1 }}
         data={songsList}
         renderItem={({ item }) => (
-          <Song song={item.name} actionText={"Remove Song"} />
+          <Song
+            songName={item.name}
+            actionText={"Remove Song"}
+            songLocation={item.location}
+            playSong={setSong}
+            actionFunction={handleRemoveSong}
+          />
         )}
         keyExtractor={(song) => song.id.toString()}
       />

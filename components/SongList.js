@@ -11,29 +11,37 @@
 import { StyleSheet, Text, View, FlatList } from "react-native";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState, useEffect } from "react";
+
+import { getSongListSongs } from "../data/musicdb";
+import { addSongToPlaylist } from "../data/musicdb";
 import Song from "./Song";
 
 {
 }
-const SongList = () => {
+const SongList = (props) => {
   const db = useSQLiteContext();
   const [songsList, setSongsList] = useState([]);
+  const [playSong, setPlaySong] = useState("");
 
   //we're getting all songs from songlist table and display in flatlist
   useEffect(() => {
     const loadSongs = async () => {
-      try {
-        const allSongs = await db.getAllAsync("SELECT * FROM songlist");
-        //confirm data in logs
-        console.log("Fetched Songs:", allSongs);
-
-        setSongsList(allSongs);
-      } catch (error) {
-        console.error("Failed to fetch songs:", error);
-      }
+      const allSongs = await getSongListSongs(db);
+      //confirm data in logs
+      console.log("Fetched Songs:", allSongs);
+      setSongsList(allSongs);
     };
     loadSongs();
   }, [db]);
+
+  const handleAddSong = async (name,location) => {
+    await addSongToPlaylist(db, name, location);
+  };
+
+  function setSong(song) {
+    setPlaySong(song);
+    props.playSong(playSong);
+  }
 
   return (
     <View style={styles.playlist}>
@@ -42,7 +50,13 @@ const SongList = () => {
         style={{ flex: 1 }}
         data={songsList}
         renderItem={({ item }) => (
-          <Song song={item.name} actionText={"Add Song"} />
+          <Song
+            songName={item.name}
+            actionText={"Add Song"}
+            songLocation={item.location}
+            playSong={setSong}
+            actionFunction={handleAddSong}
+          />
         )}
         keyExtractor={(song) => song.id.toString()}
       />

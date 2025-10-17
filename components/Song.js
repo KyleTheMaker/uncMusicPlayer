@@ -24,21 +24,24 @@ const Song = (props) => {
         onLongPress={() => {
           setVisible(!isVisible);
         }}
-        onPressOut={playSelectedSong}
+        onPressOut={() => props.playSong(props.songLocation)}
       >
         {isVisible && (
-          <Pressable style={styles.pressRemove} onPressOut={actionSelectedSong}>
+          <Pressable style={styles.pressRemove} onPressOut={() => props.actionFunction(props.songName,props.songLocation)}>
             <Text>{props.actionText}</Text>
           </Pressable>
         )}
-        <Text>{props.song}</Text>
+        <Text>{props.songName}</Text>
       </Pressable>
     </View>
   );
 };
 
-
-const playSelectedSong = () => {};
+//this needs to send song location to mediaPlayer
+const playSelectedSong = () => {
+  const songToPlay = props.songLocation;
+};
+//this has special action based on parent - add or remove song
 const actionSelectedSong = () => {};
 
 const styles = StyleSheet.create({

@@ -25,8 +25,19 @@ import { useState } from "react";
 import MediaPlayer from "./components/MediaPlayer";
 import PlayList from "./components/PlayList";
 import SongList from "./components/SongList";
+import { manageDBIfNeeded } from "./data/musicdb";
 
 export default function App() {
+
+  /**
+   * logic needed for adding selected song
+   * 
+  */
+ const [playSong, setPlaySong] = useState('');
+
+   function setSong(song) {
+    setPlaySong(song);
+  }
 
   return (
     <SafeAreaProvider>
@@ -41,50 +52,14 @@ export default function App() {
           <View
             style={{ flexDirection: "row", flex: 1, justifyContent: "center" }}
           >
-            <PlayList />
-            <SongList />
+            <PlayList playSong={setSong}/>
+            <SongList playSong={setSong}/>
           </View>
           <StatusBar style="auto" />
         </SafeAreaView>
       </SQLiteProvider>
     </SafeAreaProvider>
   );
-}
-
-async function manageDBIfNeeded(db) {
-  const DATABASE_VERSION = 1;
-
-  let result = await db.getFirstAsync("PRAGMA user_version");
-  let currentDbVersion = result ? result.user_version : 0;
-
-  if (currentDbVersion >= DATABASE_VERSION) {
-    return;
-  }
-  if (currentDbVersion === 0) {
-    await db.execAsync(`
-    PRAGMA journal_mode = WAL;
-    CREATE TABLE IF NOT EXISTS songlist (id INTEGER PRIMARY KEY NOT null, name TEXT UNIQUE NOT null, location TEXT NOT NULL);
-    CREATE TABLE IF NOT EXISTS playlist (id INTEGER PRIMARY KEY NOT null, name TEXT UNIQUE NOT null, location TEXT NOT NULL);
-    INSERT OR IGNORE INTO playlist (name, location) VALUES ("Fuzzy Cats and Mushrooms", "./assets/music/cats-and-mushrooms.mp3");
-    INSERT OR IGNORE INTO playlist (name, location) VALUES ("Peaceful Lofi", "./assets/music/peacful-lofi.mp3");
-    INSERT OR IGNORE INTO playlist (name, location) VALUES ("Unstoppable Dance", "./assets/music/unstoppable-dance.mp3");
-    INSERT OR IGNORE INTO songlist (name, location) VALUES ("Fuzzy Cats and Mushrooms", "./assets/music/cats-and-mushrooms.mp3");
-    INSERT OR IGNORE INTO songlist (name, location) VALUES ("Peaceful Lofi", "./assets/music/peacful-lofi.mp3");
-    INSERT OR IGNORE INTO songlist (name, location) VALUES ("Unstoppable Dance", "./assets/music/unstoppable-dance.mp3");
-    INSERT OR IGNORE INTO songlist (name, location) VALUES ("afrobeat-chill", "./assets/music/afrobeat-chill.mp3");
-    INSERT OR IGNORE INTO songlist (name, location) VALUES ("chill-lofi", "./assets/music/chill-lofi.mp3");
-    INSERT OR IGNORE INTO songlist (name, location) VALUES ("chill-lounge-lofi", "./assets/music/chill-lounge-lofi.mp3");
-    INSERT OR IGNORE INTO songlist (name, location) VALUES ("chillhop-in-new-york", "./assets/music/chillhop-in-new-york.mp3");
-    INSERT OR IGNORE INTO songlist (name, location) VALUES ("chillhop-lofi", "./assets/music/chillhop-lofi.mp3");
-    INSERT OR IGNORE INTO songlist (name, location) VALUES ("japanese-magic-lofi", "./assets/music/japanese-magic-lofi.mp3");
-    INSERT OR IGNORE INTO songlist (name, location) VALUES ("jazzy-lofi-rhythm", "./assets/music/jazzy-lofi-rhythm.mp3");
-    `);
-    currentDbVersion = 1;
-  }
-  // if (currentDbVersion === 1) {
-  //   Add more migrations
-  // }
-  await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);
 }
 
 const Header = () => {
