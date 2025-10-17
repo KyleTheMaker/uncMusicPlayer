@@ -40,3 +40,11 @@ https://github.com/callstack/react-native-slider#installation--usage
 **Expo SQLite (song and playlist storage):**  
 https://docs.expo.dev/versions/latest/sdk/sqlite/  
 https://github.com/OmonUrkinbaev/SQLiteExampleApp/tree/master
+https://docs.expo.dev/versions/latest/sdk/sqlite/
+
+**Expo Vector Icons:**  
+https://docs.expo.dev/guides/icons/
+
+**Tabs Navigator**  
+https://reactnavigation.org/docs/bottom-tab-navigator/?config=dynamic
+
