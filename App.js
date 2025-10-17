@@ -1,91 +1,36 @@
-/** uncMusicPlayer
- * 
- * 
- * The only functional component is the MediaPlayer
- * SongList and Playlist are just hardcoded flatlists
- * Longpressing a song name opens the button intended for
- * adding or removing a song from a playlist/songlist
- * 
- * 
- */
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Ionicons } from '@expo/vector-icons';
+import HomeScreen from './screens/Home';
+import PlaylistScreen from './screens/Playlist';
 
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { useState } from "react";
-
-import MediaPlayer from "./components/MediaPlayer";
-import PlayList from "./components/PlayList";
-import SongList from "./components/SongList";
-
-const audioSources = [
-  require("./assets/music/cats-and-mushrooms.mp3"),
-  require("./assets/music/peaceful-lofi.mp3"),
-  require("./assets/music/unstoppable-dance.mp3"),
-];
-const songNames = [
-  { id: 0, name: "Fuzzy Cats and Mushrooms" },
-  { id: 1, name: "Peaceful Lofi" },
-  { id: 2, name: "Unstoppable Dance" },
-  { id: 3, name: "afrobeat-chill" },
-  { id: 4, name: "cats-and-mushrooms" },
-  { id: 5, name: "chill-lofi" },
-  { id: 6, name: "chill-lounge-lofi" },
-  { id: 7, name: "chillhop-in-new-york" },
-  { id: 8, name: "chillhop-lofi" },
-  { id: 9, name: "japanese-magic-lofi" },
-  { id: 10, name: "jazzy-lofi-rhythm" },
-  { id: 11, name: "peaceful-lofi" },
-  { id: 12, name: "unstoppable-dance" },
-];
+const Tab = createBottomTabNavigator();
 
 export default function App() {
-
-  
   return (
-    <SafeAreaProvider>
-      <SafeAreaView
-        style={{ flex: 1, flexDirection: "column", overflow: "hidden" }}
+    <NavigationContainer>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+                let iconName;
+
+                if (route.name === 'Home') {
+                    iconName = focused ? 'musical-notes' : 'musical-notes-outline';
+                } else if (route.name === 'Playlist') {
+                    iconName = focused ? 'albums' : 'albums-outline';
+                }
+
+                // You can return any component that you like here!
+                return <Ionicons name={iconName} size={size} color={color} />;
+            },
+            tabBarActiveTintColor: 'blue',
+            tabBarInactiveTintColor: 'gray',
+        })}
       >
-        <View style={styles.container}>
-          <Header />
-          <MediaPlayer />
-        </View>
-        <View
-          style={{ flexDirection: "row", flex: 1, justifyContent: "center" }}
-        >
-          <PlayList />
-          <SongList />
-        </View>
-        <StatusBar style="auto" />
-      </SafeAreaView>
-    </SafeAreaProvider>
+        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="Playlist" component={PlaylistScreen} />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
-
-const Header = () => {
-  return (
-    <View>
-      <Text style={{ textAlign: "center", fontWeight: "bold" }}>
-        Music Player
-      </Text>
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    // flex: 1,
-    // flexDirection: "column",
-    paddingBottom: 10,
-    marginBottom: 10,
-    backgroundColor: "#fff",
-    alignItems: "stretch",
-    justifyContent: "center",
-  },
-  button: {
-    margin: 5,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-});
