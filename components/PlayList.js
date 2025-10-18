@@ -13,7 +13,6 @@ import { useSQLiteContext } from "expo-sqlite";
 import { useState, useEffect } from "react";
 import { getPlayListSongs } from "../data/musicdb";
 
-import { removeSongFromPlaylist } from "../data/musicdb";
 import Song from "./Song";
 
 const PlayList = (props) => {
@@ -65,6 +64,7 @@ const PlayList = (props) => {
 const styles = StyleSheet.create({
   playlist: {
     backgroundColor: "#8d3434ff",
+    flex: 1,
     justifyContent: "center",
     alignContent: "stretch",
     paddingEnd: 10,
