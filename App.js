@@ -19,8 +19,11 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
+
+import SettingsScreen from './screens/SettingsScreen';
 import HomeScreen from './screens/Home';
-import PlaylistScreen from './screens/Playlist';
+import PlaylistScreen from './screens/PlayListScreen';
+import MusicPlayer from './screens/MusicPlayer';
 
 const Tab = createBottomTabNavigator();
 
@@ -33,9 +36,13 @@ export default function App() {
                 let iconName;
 
                 if (route.name === 'Home') {
-                    iconName = focused ? 'musical-notes' : 'musical-notes-outline';
+                    iconName = focused ? 'home' : 'home-outline';
                 } else if (route.name === 'Playlist') {
                     iconName = focused ? 'albums' : 'albums-outline';
+                } else if (route.name === 'MusicPlayer') {
+                  iconName = focused ? 'musical-notes' : 'musical-notes-outline';
+                } else if (route.name === 'Settings') {
+                  iconName = focused ? 'settings' : 'settings-outline';
                 }
 
                 // You can return any component that you like here!
@@ -47,6 +54,8 @@ export default function App() {
       >
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Playlist" component={PlaylistScreen} />
+        <Tab.Screen name="MusicPlayer" component={MusicPlayer} />
+        <Tab.Screen name="Settings" component={SettingsScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );

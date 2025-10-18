@@ -28,13 +28,14 @@ import SongList from "../components/SongList";
 import { manageDBIfNeeded } from "../data/musicdb";
 
 export default function App() {
+
   /**
    * logic needed for adding selected song
-   *
-   */
-  const [playSong, setPlaySong] = useState("");
+   * 
+  */
+ const [playSong, setPlaySong] = useState('');
 
-  function setSong(song) {
+   function setSong(song) {
     setPlaySong(song);
   }
 
@@ -45,29 +46,15 @@ export default function App() {
           style={{ flex: 1, flexDirection: "column", overflow: "hidden" }}
         >
           <View style={styles.container}>
-            <Header />
-          </View>
-          <View
-            style={{ flexDirection: "row", flex: 1, justifyContent: "center" }}
-          >
-            <SongList playSong={setSong} />
+            <MediaPlayer />
           </View>
           <StatusBar style="auto" />
         </SafeAreaView>
       </SQLiteProvider>
     </SafeAreaProvider>
-  );
+    );
 }
 
-const Header = () => {
-  return (
-    <View>
-      <Text style={{ textAlign: "center", fontWeight: "bold" }}>
-        Music Player
-      </Text>
-    </View>
-  );
-};
 
 const styles = StyleSheet.create({
   container: {
