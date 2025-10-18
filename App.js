@@ -23,7 +23,7 @@ import { Ionicons } from '@expo/vector-icons';
 import SettingsScreen from './screens/SettingsScreen';
 import HomeScreen from './screens/Home';
 import PlaylistScreen from './screens/PlayListScreen';
-import MusicPlayer from './screens/MusicPlayer';
+import MediaPlayerScreen from './screens/MediaPlayerScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -39,7 +39,7 @@ export default function App() {
                     iconName = focused ? 'home' : 'home-outline';
                 } else if (route.name === 'Playlist') {
                     iconName = focused ? 'albums' : 'albums-outline';
-                } else if (route.name === 'MusicPlayer') {
+                } else if (route.name === 'Music Player') {
                   iconName = focused ? 'musical-notes' : 'musical-notes-outline';
                 } else if (route.name === 'Settings') {
                   iconName = focused ? 'settings' : 'settings-outline';
@@ -54,7 +54,7 @@ export default function App() {
       >
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Playlist" component={PlaylistScreen} />
-        <Tab.Screen name="MusicPlayer" component={MusicPlayer} />
+        <Tab.Screen name="Music Player" component={MediaPlayerScreen} />
         <Tab.Screen name="Settings" component={SettingsScreen} />
       </Tab.Navigator>
     </NavigationContainer>
