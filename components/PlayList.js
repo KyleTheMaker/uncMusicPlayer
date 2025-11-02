@@ -12,13 +12,13 @@ import { StyleSheet, Text, View, Pressable, FlatList } from "react-native";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState, useEffect } from "react";
 import { getPlayListSongs } from "../data/musicdb";
-import { usePlaylist } from "../context/PlayListContext";
 
 import Song from "./Song";
 
 const PlayList = (props) => {
   const db = useSQLiteContext();
-  const { setPlaylist, songsList, setSongsList, playSong, setPlaySong } = usePlaylist();
+  const [songsList, setSongsList] = useState([]);
+  const [playSong, setPlaySong] = useState("");
 
   //we're getting all songs from playlist table to display in a flatlist
   useEffect(() => {
