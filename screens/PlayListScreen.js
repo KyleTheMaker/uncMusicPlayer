@@ -3,7 +3,7 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { SQLiteProvider, useSQLiteContext } from "expo-sqlite";
 import { useState, useContext } from "react";
 import { StatusBar } from "expo-status-bar";
-import { SongContext } from "../SongContext";
+import { SongContext } from "../context/SongContext";
 
 import { manageDBIfNeeded } from "../data/musicdb";
 

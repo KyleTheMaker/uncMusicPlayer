@@ -21,7 +21,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
-import { SongProvider } from "./SongContext";
+import { SongProvider } from "./context/SongContext";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { SQLiteProvider, useSQLiteContext } from "expo-sqlite";
 

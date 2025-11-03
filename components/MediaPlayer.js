@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
 import Slider from "@react-native-community/slider";
 import MediaButton from "./MediaButton";
-import { SongContext, useSongPlayer } from "../SongContext";
+import { SongContext, useSongPlayer } from "../context/SongContext";
 
 const audioSources = [
   require("../assets/music/cats-and-mushrooms.mp3"),

@@ -12,7 +12,7 @@ import { StyleSheet, Text, View, Pressable, FlatList } from "react-native";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState, useEffect } from "react";
 import { getPlayListSongs } from "../data/musicdb";
-import { useSongPlayer } from "../SongContext";
+import { useSongPlayer } from "../context/SongContext";
 
 import Song from "./Song";
 

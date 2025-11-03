@@ -11,7 +11,7 @@
 import { StyleSheet, Text, View, FlatList } from "react-native";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState, useEffect } from "react";
-import { useSongPlayer } from "../SongContext";
+import { useSongPlayer } from "../context/SongContext";
 
 import { getSongListSongs } from "../data/musicdb";
 import { addSongToPlaylist } from "../data/musicdb";
