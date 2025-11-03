@@ -24,6 +24,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { SongProvider } from "./context/SongContext";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { SQLiteProvider, useSQLiteContext } from "expo-sqlite";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { manageDBIfNeeded } from "./data/musicdb";
 
@@ -39,37 +40,41 @@ export default function App() {
     <SafeAreaProvider>
       <SQLiteProvider databaseName="uncMusic.db" onInit={manageDBIfNeeded}>
         <SongProvider>
-          <NavigationContainer>
-            <Tab.Navigator
-              screenOptions={({ route }) => ({
-                tabBarIcon: ({ focused, color, size }) => {
-                  let iconName;
+          <GestureHandlerRootView>
+            <NavigationContainer>
+              <Tab.Navigator
+                screenOptions={({ route }) => ({
+                  tabBarIcon: ({ focused, color, size }) => {
+                    let iconName;
 
-                  if (route.name === "Home") {
-                    iconName = focused ? "home" : "home-outline";
-                  } else if (route.name === "Playlist") {
-                    iconName = focused ? "albums" : "albums-outline";
-                  } else if (route.name === "Music Player") {
-                    iconName = focused
-                      ? "musical-notes"
-                      : "musical-notes-outline";
-                  } else if (route.name === "Settings") {
-                    iconName = focused ? "settings" : "settings-outline";
-                  }
+                    if (route.name === "Home") {
+                      iconName = focused ? "home" : "home-outline";
+                    } else if (route.name === "Playlist") {
+                      iconName = focused ? "albums" : "albums-outline";
+                    } else if (route.name === "Music Player") {
+                      iconName = focused
+                        ? "musical-notes"
+                        : "musical-notes-outline";
+                    } else if (route.name === "Settings") {
+                      iconName = focused ? "settings" : "settings-outline";
+                    }
 
-                  // You can return any component that you like here!
-                  return <Ionicons name={iconName} size={size} color={color} />;
-                },
-                tabBarActiveTintColor: "blue",
-                tabBarInactiveTintColor: "gray",
-              })}
-            >
-              <Tab.Screen name="Home" component={HomeScreen} />
-              <Tab.Screen name="Playlist" component={PlaylistScreen} />
-              <Tab.Screen name="Music Player" component={MediaPlayerScreen} />
-              <Tab.Screen name="Settings" component={SettingsScreen} />
-            </Tab.Navigator>
-          </NavigationContainer>
+                    // You can return any component that you like here!
+                    return (
+                      <Ionicons name={iconName} size={size} color={color} />
+                    );
+                  },
+                  tabBarActiveTintColor: "blue",
+                  tabBarInactiveTintColor: "gray",
+                })}
+              >
+                <Tab.Screen name="Home" component={HomeScreen} />
+                <Tab.Screen name="Playlist" component={PlaylistScreen} />
+                <Tab.Screen name="Music Player" component={MediaPlayerScreen} />
+                <Tab.Screen name="Settings" component={SettingsScreen} />
+              </Tab.Navigator>
+            </NavigationContainer>
+          </GestureHandlerRootView>
         </SongProvider>
       </SQLiteProvider>
     </SafeAreaProvider>
