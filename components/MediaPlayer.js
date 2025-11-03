@@ -4,13 +4,13 @@
  * Media Player component displays track info and allows track control
  * Tracks are currently hardcoded into the media player
  * ideally tracks come from database
- * 
+ *
  * TODO:
  *  - Audio sources should be provided by parent (database?)
  *  - Song name should also come from parent (database?)
- * 
- * 
- * 
+ *
+ *
+ *
  */
 import { StyleSheet, Text, View, Button, Pressable, Alert } from "react-native";
 import { useEffect, useState } from "react";
@@ -19,36 +19,34 @@ import Slider from "@react-native-community/slider";
 import MediaButton from "./MediaButton";
 import { SongContext, useSongPlayer } from "../context/SongContext";
 
-const audioSources = [
-  require("../assets/music/cats-and-mushrooms.mp3"),
-  require("../assets/music/peaceful-lofi.mp3"),
-  require("../assets/music/unstoppable-dance.mp3"),
-];
-const songNames = [
-  "Fuzzy Cats and Mushrooms",
-  "Peaceful Lofi",
-  "Unstoppable Dance",
-];
-
-
-
 const MediaPlayer = () => {
-
-  const {currentSong, changeTrack} = useSongPlayer();
+  const { currentSong, changeTrack, isLoading } = useSongPlayer();
 
   const [songPosition, setSongPosition] = useState(0);
-  const player = useAudioPlayer(currentSong.location);
-  const status = useAudioPlayerStatus(player).currentTime;
-  const duration = player.duration;
-  const timeDisplay =
-    (duration / 60).toFixed(0) + ":" + (duration % 60).toFixed(0);
-    
-    useEffect(() => {
-      if(currentSong && player.isLoaded){
-        player.play();
-      }
-    }, [currentSong.location, player.isLoaded]);
+  const player = useAudioPlayer(isLoading ? null : currentSong.location);
+  const status = useAudioPlayerStatus(player)?.currentTime || 0;
+  const duration = player?.duration || 0;
+  const formatTime = (totalSeconds) => {
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = Math.floor(totalSeconds % 60);
+        return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    };
+  const timeDisplay = formatTime(duration);
+  const statusDisplay = formatTime(status);
 
+  if (isLoading) {
+    return (
+      <View style={styles.mediaPlayer}>
+        <Text>Loading music from database...</Text>
+      </View>
+    );
+  }
+
+  useEffect(() => {
+    if (!isLoading && currentSong.location && player.isLoaded) {
+      player.play();
+    }
+  }, [currentSong.location, player.isLoaded, isLoading]);
 
   return (
     <View style={styles.mediaPlayer}>

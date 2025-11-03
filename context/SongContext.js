@@ -6,16 +6,20 @@
  *  and a way for song component to send back the chosen song
  */
 
-import { createContext, useState, useContext } from "react";
-import { AudioAssetMap } from "../data/musicdb";
+import { createContext, useState, useContext, useEffect } from "react";
+import { AudioAssetMap, getSongListSongs } from "../data/musicdb";
+import { useSQLiteContext } from "expo-sqlite";
 
 export const SongContext = createContext({
   currentSong: { location: null, name: "Nothing Playing" },
   playNewSong: () => {},
+  isLoading: true,
 });
 
 
 export const SongProvider = ({ children }) => {
+  const db = useSQLiteContext();
+  const [isLoading, setIsLoading] = useState(true);
   const [playerState, setPlayerState] = useState({
     currentSong: {
       location: null,
@@ -24,6 +28,36 @@ export const SongProvider = ({ children }) => {
     currentList: [],
     currentIndex: -1,
   });
+
+  useEffect(()=>{
+    if(db && isLoading){
+      async function initializePlayer() {
+        try{
+          const initialList = await getSongListSongs(db);
+          if(initialList && initialList.length > 0){
+            const firstSong = initialList[0];
+            const firstAsset = AudioAssetMap[firstSong.location];
+
+            if(firstAsset){
+              setPlayerState({
+                currentSong: {location: firstAsset, name: firstSong.name},
+                currentList: initialList,
+                currentIndex: 0,
+              });
+            } else {
+              console.error("Asset not found for first song: ", firstSong.location);
+            }
+          }
+        } catch (error) {
+          console.error("error loading initial song list:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+      initializePlayer();
+    }
+
+  }, [db]);
 
   const {currentSong, currentList, currentIndex} = playerState;
 
@@ -68,6 +102,7 @@ export const SongProvider = ({ children }) => {
     currentSong,
     playNewSong,
     changeTrack,
+    isLoading,
   };
 
   return (
