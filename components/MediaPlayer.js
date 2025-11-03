@@ -12,8 +12,8 @@
  * 
  * 
  */
-import { StyleSheet, Text, View, Button, Pressable, Alert } from "react-native";
-import { useState } from "react";
+import { StyleSheet, Text, View, Button, Pressable, Alert, Image } from "react-native";
+import { useState, useEffect } from "react";
 import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
 import Slider from "@react-native-community/slider";
 import MediaButton from "./MediaButton";
@@ -29,62 +29,100 @@ const songNames = [
   "Unstoppable Dance",
 ];
 
-
-
 const MediaPlayer = () => {
   const [songPosition, setSongPosition] = useState(0);
+  const [isPlay, setIsPlay] = useState(true);
+  const [currentTime, setCurrentTime] = useState("");
+  const [formattedSongDuration, setFormattedSongDuration] = useState("0:00");
   const player = useAudioPlayer(audioSources[songPosition]);
   const status = useAudioPlayerStatus(player).currentTime;
   const duration = player.duration;
-  const timeDisplay =
-    (duration / 60).toFixed(0) + ":" + (duration % 60).toFixed(0);
+  const coverImages = [
+    require('../assets/vinyl-record.gif'),
+    require('../assets/vinyl-record-static.png'),
+  ];
+  const [currentImage, setCurrentImage] = useState(coverImages[0]);
+
+  // update current time
+  useEffect(() => {
+    setCurrentTime(formatTime(status))
+  }, [status])
+
+  // update song duration
+  useEffect(() => {
+    if(duration == 0) return
+    else setFormattedSongDuration(formatTime(duration))
+  }, [duration])
+
+  // play when song changed
+  useEffect(() => {
+    player.replace(audioSources[songPosition])
+    player.play()
+    setIsPlay(true)
+  }, [songPosition])
+
+  // change image when isPlay variable changed
+  useEffect(() => {
+    if(isPlay){
+      setCurrentImage(coverImages[0])
+    }
+    else{
+      setCurrentImage(coverImages[1])
+    }
+  }, [isPlay])
+
+  const formatTime = (totalSeconds) => {
+    const mins = Math.floor(totalSeconds / 60)
+    const secs = totalSeconds % 60
+    const formattedSecs = secs < 10 ? `0${secs.toFixed(0)}` : secs.toFixed(0)
+    return `${mins}:${formattedSecs}`
+  }
 
   const nextSong = () => {
-    player.pause();
-    setSongPosition(songPosition + 1);
-
-    if (songPosition >= audioSources.length) {
-      setSongPosition(0);
-      player.replace(audioSources[songPosition]);
-    } else {
-      player.replace(audioSources[songPosition]);
+    if(songPosition + 1 >= audioSources.length){
+      setSongPosition(0)
+    }
+    else{
+      setSongPosition((prevVal) => prevVal + 1);  
     }
   };
 
   const prevSong = () => {
-    player.pause();
-    setSongPosition(songPosition - 1);
-    if (songPosition <= 0) {
-      setSongPosition(0);
-      player.replace(audioSources[songPosition]);
-    } else {
-      player.replace(audioSources[songPosition]);
+    if(songPosition - 1 < 0){
+      setSongPosition(audioSources.length - 1)
+    }
+    else{
+      setSongPosition((prevVal) => prevVal - 1);  
     }
   };
 
+  const handlePlayButton = () => {
+    if(isPlay){
+      player.pause()
+    }
+    else{
+      player.play()
+    }
+
+    setIsPlay((prevVal) => !prevVal)
+  }
+
   return (
     <View style={styles.mediaPlayer}>
-      <Text>Now Playing: {songNames[songPosition]}</Text>
-      <Text>Song Length: {timeDisplay}</Text>
-      <Text>Song number: {songPosition + 1}</Text>
-      <View style={styles.buttonContainer}>
-        <MediaButton text="Previous" pressOut={prevSong} />
-        <MediaButton text="Play" pressOut={() => player.play()} />
-        <MediaButton text="Pause" pressOut={() => player.pause()} />
-        <MediaButton text="Next" pressOut={nextSong} />
-      </View>
-      <View style={styles.buttonContainer}>
-        <MediaButton text="Restart" pressOut={() => player.seekTo(0)} />
-        <MediaButton
-          text="Press You!"
-          pressOut={() => {
-            Alert.alert("Don't Panic!");
-          }}
+      <View style={styles.imageContainer}>
+        <Image
+          style={styles.coverImage}
+          source={currentImage}
         />
       </View>
-      <View style={{ flexDirection: "row", justifyContent: "center" }}>
+
+      <View style={styles.musicBarContainer}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between", width: '100%', }}>
+          <Text>{currentTime}</Text>
+          <Text>{formattedSongDuration}</Text>
+        </View>
         <Slider
-          style={{ width: 300, height: 20, margin: 5 }}
+          style={{ width: '100%', margin: 5 }}
           minimumValue={0}
           maximumValue={duration}
           step={1}
@@ -93,12 +131,23 @@ const MediaPlayer = () => {
           minimumTrackTintColor="#2e3299ff"
           maximumTrackTintColor="#000000"
         />
-        <Text>
-          {(status / 60).toFixed(0) +
-            ":" +
-            (status < 10 ? "0" : "") +
-            (status % 60).toFixed(0)}
-        </Text>
+        <Text style={{fontSize: 30, textAlign: 'center', margin: 5}}>{songNames[songPosition]}</Text>
+        <Text style={{fontSize: 14, textAlign: 'center', margin: 5}}>Track #{songPosition + 1}</Text>
+      </View>
+
+      <View style={styles.buttonContainer}>
+        <View style={styles.buttonRowContainer}>
+          <MediaButton icon="play-skip-back" size={60} pressOut={prevSong} />
+          <MediaButton icon={isPlay ? "pause-circle" : "play-circle"} size={90} pressOut={handlePlayButton}/>
+          <MediaButton icon="play-skip-forward" size={60} pressOut={nextSong} />
+          {/*<MediaButton icon="play-circle" size={90} pressOut={() => player.seekTo(0)} />
+          <MediaButton
+            text="Press You!"
+            pressOut={() => {
+              Alert.alert("Don't Panic!");
+            }}
+          />*/}
+        </View>
       </View>
     </View>
   );
@@ -106,23 +155,32 @@ const MediaPlayer = () => {
 
 const styles = StyleSheet.create({
   mediaPlayer: {
-    marginBottom: 5,
+    flex: 1,
+    padding: 8,
+  },
+  imageContainer: {
+    flex:3,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  coverImage: {
+    width: 350,
+    height: 350,
+    resizeMode: 'cover',
+  },
+  musicBarContainer: {
+    flex: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   buttonContainer: {
-    margin: 5,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
+    flex: 1,
+    justifyContent: 'center',
   },
-  pressBtn: {
-    backgroundColor: "#ffa",
-    fontWeight: "heavy",
-    margin: 5,
-    borderWidth: 2,
-    borderRadius: 20,
-    padding: 10,
-    height: "auto",
-    width: "auto",
+  buttonRowContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

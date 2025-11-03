@@ -58,12 +58,9 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
-    // flexDirection: "column",
-    paddingBottom: 10,
-    marginBottom: 10,
+    flex: 1,
+    paddingBottom: 4,
     backgroundColor: "#fff",
-    alignItems: "stretch",
     justifyContent: "center",
   },
   button: {

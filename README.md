@@ -48,3 +48,5 @@ https://docs.expo.dev/guides/icons/
 **Tabs Navigator**  
 https://reactnavigation.org/docs/bottom-tab-navigator/?config=dynamic
 
+**Assets**
+https://pixabay.com/gifs/record-retro-vinyl-music-8329/
