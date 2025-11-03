@@ -16,6 +16,8 @@ import { StyleSheet, Text, View, Button, Pressable, Alert, Image } from "react-n
 import { useState, useEffect } from "react";
 import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
 import Slider from "@react-native-community/slider";
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+
 import MediaButton from "./MediaButton";
 
 const audioSources = [
@@ -42,6 +44,7 @@ const MediaPlayer = () => {
     require('../assets/vinyl-record-static.png'),
   ];
   const [currentImage, setCurrentImage] = useState(coverImages[0]);
+  const MAX_TRANSLATION_Y = 300;
 
   // update current time
   useEffect(() => {
@@ -107,49 +110,89 @@ const MediaPlayer = () => {
     setIsPlay((prevVal) => !prevVal)
   }
 
+  useEffect(() => {
+    console.log(`volume:${player.volume}`)
+  }, [player.volume])
+
+  const panGesture = Gesture.Pan()
+    .onEnd((e) => {
+      const { translationX, translationY } = e;
+
+      if (Math.abs(translationX) > Math.abs(translationY)) {
+        // Horizontal swipe
+        if (translationX > 50) {
+          console.log('Swiped right');
+        } else if (translationX < -50) {
+          console.log('Swiped left');
+        }
+        console.log(translationX)
+      } else {
+        // Vertical swipe
+        let normalizedY = Math.min(Math.abs(translationY) / MAX_TRANSLATION_Y, 1); // normalized value between 0-1
+
+        if (translationY > 20) {
+          // swiped down, decrease volume
+          normalizedY *= -1
+          console.log("swiped down")
+        } else if (translationY < 20) {
+          // swiped up, increase volume
+          console.log("swiped up")
+        }
+        
+        let newVolume = player.volume + normalizedY
+
+        if(newVolume >= 1) newVolume = 1
+        else if(newVolume <= 0) newVolume = 0.0
+
+        player.volume = newVolume
+      }
+    });
+
   return (
-    <View style={styles.mediaPlayer}>
-      <View style={styles.imageContainer}>
-        <Image
-          style={styles.coverImage}
-          source={currentImage}
-        />
-      </View>
-
-      <View style={styles.musicBarContainer}>
-        <View style={{ flexDirection: "row", justifyContent: "space-between", width: '100%', }}>
-          <Text>{currentTime}</Text>
-          <Text>{formattedSongDuration}</Text>
+    <GestureDetector gesture={panGesture}>
+      <View style={styles.mediaPlayer}>
+        <View style={styles.imageContainer}>
+          <Image
+            style={styles.coverImage}
+            source={currentImage}
+          />
         </View>
-        <Slider
-          style={{ width: '100%', margin: 5 }}
-          minimumValue={0}
-          maximumValue={duration}
-          step={1}
-          value={status}
-          onSlidingComplete={(value) => player.seekTo(value)}
-          minimumTrackTintColor="#2e3299ff"
-          maximumTrackTintColor="#000000"
-        />
-        <Text style={{fontSize: 30, textAlign: 'center', margin: 5}}>{songNames[songPosition]}</Text>
-        <Text style={{fontSize: 14, textAlign: 'center', margin: 5}}>Track #{songPosition + 1}</Text>
-      </View>
 
-      <View style={styles.buttonContainer}>
-        <View style={styles.buttonRowContainer}>
-          <MediaButton icon="play-skip-back" size={60} pressOut={prevSong} />
-          <MediaButton icon={isPlay ? "pause-circle" : "play-circle"} size={90} pressOut={handlePlayButton}/>
-          <MediaButton icon="play-skip-forward" size={60} pressOut={nextSong} />
-          {/*<MediaButton icon="play-circle" size={90} pressOut={() => player.seekTo(0)} />
-          <MediaButton
-            text="Press You!"
-            pressOut={() => {
-              Alert.alert("Don't Panic!");
-            }}
-          />*/}
+        <View style={styles.musicBarContainer}>
+          <View style={{ flexDirection: "row", justifyContent: "space-between", width: '100%', }}>
+            <Text>{currentTime}</Text>
+            <Text>{formattedSongDuration}</Text>
+          </View>
+          <Slider
+            style={{ width: '100%', margin: 5 }}
+            minimumValue={0}
+            maximumValue={duration}
+            step={1}
+            value={status}
+            onSlidingComplete={(value) => player.seekTo(value)}
+            minimumTrackTintColor="#2e3299ff"
+            maximumTrackTintColor="#000000"
+          />
+          <Text style={{fontSize: 30, textAlign: 'center', margin: 5}}>{songNames[songPosition]}</Text>
+          <Text style={{fontSize: 14, textAlign: 'center', margin: 5}}>Track #{songPosition + 1}</Text>
+        </View>
+
+        <View style={styles.buttonContainer}>
+          <View style={styles.buttonRowContainer}>
+            <MediaButton icon="play-skip-back" size={60} pressOut={prevSong} />
+            <MediaButton icon={isPlay ? "pause-circle" : "play-circle"} size={90} pressOut={handlePlayButton}/>
+            <MediaButton icon="play-skip-forward" size={60} pressOut={nextSong} />
+            {/*<MediaButton icon="play-circle" size={90} pressOut={() => player.seekTo(0)} />
+            <MediaButton
+              text="Press You!"
+              pressOut={() => {
+                Alert.alert("Don't Panic!");
+              }}
+            />*/}
+          </View>
         </View>
       </View>
-    </View>
+    </GestureDetector>
   );
 };
 
