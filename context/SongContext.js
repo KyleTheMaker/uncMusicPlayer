@@ -7,24 +7,13 @@
  */
 
 import { createContext, useState, useContext } from "react";
+import { AudioAssetMap } from "../data/musicdb";
 
 export const SongContext = createContext({
   currentSong: { location: null, name: "Nothing Playing" },
   playNewSong: () => {},
 });
 
-const audioAssetMap = {
-  "./assets/music/afrobeat-chill.mp3": require("./assets/music/afrobeat-chill.mp3"),
-  "./assets/music/cats-and-mushrooms.mp3": require("./assets/music/cats-and-mushrooms.mp3"),
-  "./assets/music/chill-lofi.mp3": require("./assets/music/chill-lofi.mp3"),
-  "./assets/music/chill-lounge-lofi.mp3": require("./assets/music/chill-lounge-lofi.mp3"),
-  "./assets/music/chillhop-in-new-york.mp3": require("./assets/music/chillhop-in-new-york.mp3"),
-  "./assets/music/chillhop-lofi.mp3": require("./assets/music/chillhop-lofi.mp3"),
-  "./assets/music/japanese-magic-lofi.mp3": require("./assets/music/japanese-magic-lofi.mp3"),
-  "./assets/music/jazzy-lofi-rhythm.mp3": require("./assets/music/jazzy-lofi-rhythm.mp3"),
-  "./assets/music/peaceful-lofi.mp3": require("./assets/music/peaceful-lofi.mp3"),
-  "./assets/music/unstoppable-dance.mp3": require("./assets/music/unstoppable-dance.mp3"),
-};
 
 export const SongProvider = ({ children }) => {
   const [playerState, setPlayerState] = useState({
@@ -39,7 +28,7 @@ export const SongProvider = ({ children }) => {
   const {currentSong, currentList, currentIndex} = playerState;
 
   function playNewSong(songLocation, songName, listArray, listIndex) {
-    const asset = audioAssetMap[songLocation];
+    const asset = AudioAssetMap[songLocation];
     if (asset) {
       //sets the require function in the location
       setPlayerState({
@@ -67,7 +56,7 @@ export const SongProvider = ({ children }) => {
 
     const nextSong = currentList[newIndex];
 
-    const asset = audioAssetMap[nextSong.location];
+    const asset = AudioAssetMap[nextSong.location];
     setPlayerState({
       currentSong: { location: asset, name: nextSong.name },
       currentList: currentList,
@@ -77,7 +66,7 @@ export const SongProvider = ({ children }) => {
 
   const contextValue = {
     currentSong,
-    playNewSong, //update function for song component
+    playNewSong,
     changeTrack,
   };
 
