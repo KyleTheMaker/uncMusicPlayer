@@ -25,7 +25,7 @@ const Song = (props) => {
           setVisible(!isVisible);
         }}
         onPressOut={() => {
-          props.playSong(props.songLocation);
+          props.playSong(props.songLocation, props.songName);
         }}
       >
         {isVisible && (

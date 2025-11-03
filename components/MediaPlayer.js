@@ -19,6 +19,7 @@ import Slider from "@react-native-community/slider";
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 
 import MediaButton from "./MediaButton";
+import { SongContext, useSongPlayer } from "../context/SongContext";
 
 const audioSources = [
   require("../assets/music/cats-and-mushrooms.mp3"),
@@ -32,6 +33,8 @@ const songNames = [
 ];
 
 const MediaPlayer = () => {
+  const {currentSong, changeTrack} = useSongPlayer();
+
   const [songPosition, setSongPosition] = useState(0);
   const [isPlay, setIsPlay] = useState(true);
   const [currentTime, setCurrentTime] = useState("");
