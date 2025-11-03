@@ -13,10 +13,11 @@
  * 
  */
 import { StyleSheet, Text, View, Button, Pressable, Alert } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
 import Slider from "@react-native-community/slider";
 import MediaButton from "./MediaButton";
+import { SongContext, useSongPlayer } from "../SongContext";
 
 const audioSources = [
   require("../assets/music/cats-and-mushrooms.mp3"),
@@ -32,46 +33,32 @@ const songNames = [
 
 
 const MediaPlayer = () => {
+
+  const {currentSong, changeTrack} = useSongPlayer();
+
   const [songPosition, setSongPosition] = useState(0);
-  const player = useAudioPlayer(audioSources[songPosition]);
+  const player = useAudioPlayer(currentSong.location);
   const status = useAudioPlayerStatus(player).currentTime;
   const duration = player.duration;
   const timeDisplay =
     (duration / 60).toFixed(0) + ":" + (duration % 60).toFixed(0);
+    
+    useEffect(() => {
+      if(currentSong && player.isLoaded){
+        player.play();
+      }
+    }, [currentSong.location, player.isLoaded]);
 
-  const nextSong = () => {
-    player.pause();
-    setSongPosition(songPosition + 1);
-
-    if (songPosition >= audioSources.length) {
-      setSongPosition(0);
-      player.replace(audioSources[songPosition]);
-    } else {
-      player.replace(audioSources[songPosition]);
-    }
-  };
-
-  const prevSong = () => {
-    player.pause();
-    setSongPosition(songPosition - 1);
-    if (songPosition <= 0) {
-      setSongPosition(0);
-      player.replace(audioSources[songPosition]);
-    } else {
-      player.replace(audioSources[songPosition]);
-    }
-  };
 
   return (
     <View style={styles.mediaPlayer}>
-      <Text>Now Playing: {songNames[songPosition]}</Text>
+      <Text>Now Playing: {currentSong.name}</Text>
       <Text>Song Length: {timeDisplay}</Text>
-      <Text>Song number: {songPosition + 1}</Text>
       <View style={styles.buttonContainer}>
-        <MediaButton text="Previous" pressOut={prevSong} />
+        <MediaButton text="Previous" pressOut={() => changeTrack(-1)} />
         <MediaButton text="Play" pressOut={() => player.play()} />
         <MediaButton text="Pause" pressOut={() => player.pause()} />
-        <MediaButton text="Next" pressOut={nextSong} />
+        <MediaButton text="Next" pressOut={() => changeTrack(1)} />
       </View>
       <View style={styles.buttonContainer}>
         <MediaButton text="Restart" pressOut={() => player.seekTo(0)} />

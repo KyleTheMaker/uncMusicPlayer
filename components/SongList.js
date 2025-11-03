@@ -11,6 +11,7 @@
 import { StyleSheet, Text, View, FlatList } from "react-native";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState, useEffect } from "react";
+import { useSongPlayer } from "../SongContext";
 
 import { getSongListSongs } from "../data/musicdb";
 import { addSongToPlaylist } from "../data/musicdb";
@@ -22,6 +23,7 @@ const SongList = (props) => {
   const db = useSQLiteContext();
   const [songsList, setSongsList] = useState([]);
   const [playSong, setPlaySong] = useState("");
+  const {playNewSong} = useSongPlayer();
 
   //we're getting all songs from songlist table and display in flatlist
   useEffect(() => {
@@ -38,10 +40,9 @@ const SongList = (props) => {
     await addSongToPlaylist(db, name, location);
   };
 
-  function setSong(song) {
-    setPlaySong(song);
-    props.playSong(playSong);
-  }
+  const handlePlaySong = (location, name, listArray, listIndex) => {
+    playNewSong(location, name, listArray, listIndex);
+  };
 
   return (
     <View style={styles.playlist}>
@@ -49,12 +50,12 @@ const SongList = (props) => {
       <FlatList
         style={{ flex: 1 }}
         data={songsList}
-        renderItem={({ item }) => (
+        renderItem={({ item, index }) => (
           <Song
             songName={item.name}
             actionText={"Add Song"}
             songLocation={item.location}
-            playSong={setSong}
+            playSong={(location,name) => handlePlaySong(location, name, songsList, index)}
             actionFunction={handleAddSong}
           />
         )}
