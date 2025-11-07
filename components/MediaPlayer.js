@@ -5,9 +5,6 @@
  * Tracks are currently hardcoded into the media player
  * ideally tracks come from database
  * 
- * TODO:
- *  - Audio sources should be provided by parent (database?)
- *  - Song name should also come from parent (database?)
  * 
  * 
  * 
@@ -21,25 +18,14 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import MediaButton from "./MediaButton";
 import { SongContext, useSongPlayer } from "../context/SongContext";
 
-const audioSources = [
-  require("../assets/music/cats-and-mushrooms.mp3"),
-  require("../assets/music/peaceful-lofi.mp3"),
-  require("../assets/music/unstoppable-dance.mp3"),
-];
-const songNames = [
-  "Fuzzy Cats and Mushrooms",
-  "Peaceful Lofi",
-  "Unstoppable Dance",
-];
-
 const MediaPlayer = () => {
   const {currentSong, changeTrack} = useSongPlayer();
 
-  const [songPosition, setSongPosition] = useState(0);
+  // const [songPosition, setSongPosition] = useState(0);
   const [isPlay, setIsPlay] = useState(true);
   const [currentTime, setCurrentTime] = useState("");
   const [formattedSongDuration, setFormattedSongDuration] = useState("0:00");
-  const player = useAudioPlayer(audioSources[songPosition]);
+  const player = useAudioPlayer(currentSong.location);
   const status = useAudioPlayerStatus(player).currentTime;
   const duration = player.duration;
   const coverImages = [
@@ -61,11 +47,19 @@ const MediaPlayer = () => {
   }, [duration])
 
   // play when song changed
+  // useEffect(() => {
+  //   player.replace(audioSources[songPosition])
+  //   player.play()
+  //   setIsPlay(true)
+  // }, [songPosition])
+
+  // play when song changed
   useEffect(() => {
-    player.replace(audioSources[songPosition])
+    // console.log(currentSong)
+    player.replace(currentSong.location)
     player.play()
     setIsPlay(true)
-  }, [songPosition])
+  }, [currentSong])
 
   // change image when isPlay variable changed
   useEffect(() => {
@@ -84,24 +78,6 @@ const MediaPlayer = () => {
     return `${mins}:${formattedSecs}`
   }
 
-  const nextSong = () => {
-    if(songPosition + 1 >= audioSources.length){
-      setSongPosition(0)
-    }
-    else{
-      setSongPosition((prevVal) => prevVal + 1);  
-    }
-  };
-
-  const prevSong = () => {
-    if(songPosition - 1 < 0){
-      setSongPosition(audioSources.length - 1)
-    }
-    else{
-      setSongPosition((prevVal) => prevVal - 1);  
-    }
-  };
-
   const handlePlayButton = () => {
     if(isPlay){
       player.pause()
@@ -113,10 +89,6 @@ const MediaPlayer = () => {
     setIsPlay((prevVal) => !prevVal)
   }
 
-  useEffect(() => {
-    console.log(`volume:${player.volume}`)
-  }, [player.volume])
-
   const panGesture = Gesture.Pan()
     .onEnd((e) => {
       const { translationX, translationY } = e;
@@ -124,11 +96,10 @@ const MediaPlayer = () => {
       if (Math.abs(translationX) > Math.abs(translationY)) {
         // Horizontal swipe
         if (translationX > 50) {
-          console.log('Swiped right');
+          changeTrack(1)
         } else if (translationX < -50) {
-          console.log('Swiped left');
+          changeTrack(-1)
         }
-        console.log(translationX)
       } else {
         // Vertical swipe
         let normalizedY = Math.min(Math.abs(translationY) / MAX_TRANSLATION_Y, 1); // normalized value between 0-1
@@ -136,16 +107,12 @@ const MediaPlayer = () => {
         if (translationY > 20) {
           // swiped down, decrease volume
           normalizedY *= -1
-          console.log("swiped down")
-        } else if (translationY < 20) {
-          // swiped up, increase volume
-          console.log("swiped up")
         }
         
         let newVolume = player.volume + normalizedY
 
         if(newVolume >= 1) newVolume = 1
-        else if(newVolume <= 0) newVolume = 0.0
+        else if(newVolume <= 0) newVolume = 0.1
 
         player.volume = newVolume
       }
@@ -176,15 +143,15 @@ const MediaPlayer = () => {
             minimumTrackTintColor="#2e3299ff"
             maximumTrackTintColor="#000000"
           />
-          <Text style={{fontSize: 30, textAlign: 'center', margin: 5}}>{songNames[songPosition]}</Text>
-          <Text style={{fontSize: 14, textAlign: 'center', margin: 5}}>Track #{songPosition + 1}</Text>
+          <Text style={{fontSize: 30, textAlign: 'center', margin: 5}}>{currentSong.name}</Text>
+          {/*<Text style={{fontSize: 14, textAlign: 'center', margin: 5}}>Track #{songPosition + 1}</Text>*/}
         </View>
 
         <View style={styles.buttonContainer}>
           <View style={styles.buttonRowContainer}>
-            <MediaButton icon="play-skip-back" size={60} pressOut={prevSong} />
+            <MediaButton icon="play-skip-back" size={60} pressOut={() => {changeTrack(-1)}} />
             <MediaButton icon={isPlay ? "pause-circle" : "play-circle"} size={90} pressOut={handlePlayButton}/>
-            <MediaButton icon="play-skip-forward" size={60} pressOut={nextSong} />
+            <MediaButton icon="play-skip-forward" size={60} pressOut={() => {changeTrack(1)}} />
             {/*<MediaButton icon="play-circle" size={90} pressOut={() => player.seekTo(0)} />
             <MediaButton
               text="Press You!"
