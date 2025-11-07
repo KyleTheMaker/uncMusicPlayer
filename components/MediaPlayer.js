@@ -9,12 +9,15 @@
  * 
  * 
  */
-import { StyleSheet, Text, View, Button, Pressable, Alert, Image } from "react-native";
+import { StyleSheet, Text, View, Button, Pressable, Alert, Image, Switch, Modal } from "react-native";
 import { useState, useEffect } from "react";
+import { useNavigation } from '@react-navigation/native';
 import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
 import Slider from "@react-native-community/slider";
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { Gesture, GestureDetector, LongPressGesture } from 'react-native-gesture-handler'
+import { Ionicons } from "@expo/vector-icons";
 
+import HelpModal from './HelpModal'
 import MediaButton from "./MediaButton";
 import { SongContext, useSongPlayer } from "../context/SongContext";
 
@@ -25,15 +28,21 @@ const MediaPlayer = () => {
   const [isPlay, setIsPlay] = useState(true);
   const [currentTime, setCurrentTime] = useState("");
   const [formattedSongDuration, setFormattedSongDuration] = useState("0:00");
+  const [advancedModeEnabled, setAdvancedModeEnabled] = useState(false)
+  const [showHelpModal, setshowHelpModal] = useState(false)
+  const [showVolume, setshowVolume] = useState(false)
   const player = useAudioPlayer(currentSong.location);
   const status = useAudioPlayerStatus(player).currentTime;
+  const [currentVolume, setCurrentVolume] = useState(player.volume);
   const duration = player.duration;
   const coverImages = [
     require('../assets/vinyl-record.gif'),
     require('../assets/vinyl-record-static.png'),
   ];
   const [currentImage, setCurrentImage] = useState(coverImages[0]);
-  const MAX_TRANSLATION_Y = 300;
+  const MAX_TRANSLATION_Y = 5000;
+
+  const navigation = useNavigation();
 
   // update current time
   useEffect(() => {
@@ -89,7 +98,43 @@ const MediaPlayer = () => {
     setIsPlay((prevVal) => !prevVal)
   }
 
+  const calculateVolumeChanges = (value) => {
+    const clamped = Math.min(Math.abs(value), MAX_TRANSLATION_Y);
+    const delta = clamped / MAX_TRANSLATION_Y;
+
+    return value > 0 ? -delta : delta; // down = negative, up = positive
+
+    // let normalizedY = Math.min(Math.abs(value) / MAX_TRANSLATION_Y, 1); // normalized value between 0-1
+
+    // if (value > 20) {
+    //   // swiped down, decrease volume
+    //   normalizedY *= -1
+    // }
+
+    // return normalizedY
+  }
+
   const panGesture = Gesture.Pan()
+    .onUpdate((e) => {
+      const { translationX, translationY } = e;
+
+      if (Math.abs(translationY) > Math.abs(translationX)) {
+        // Vertical swipe
+        setshowVolume(true)
+        let normalizedY = calculateVolumeChanges(translationY)
+
+        setCurrentVolume(prevVal => {
+          let newVolume = prevVal + normalizedY
+
+          if(newVolume >= 1) newVolume = 1
+          else if(newVolume <= 0.1) newVolume = 0.1
+
+          return newVolume
+        })
+      }
+
+      
+    })
     .onEnd((e) => {
       const { translationX, translationY } = e;
 
@@ -102,12 +147,7 @@ const MediaPlayer = () => {
         }
       } else {
         // Vertical swipe
-        let normalizedY = Math.min(Math.abs(translationY) / MAX_TRANSLATION_Y, 1); // normalized value between 0-1
-
-        if (translationY > 20) {
-          // swiped down, decrease volume
-          normalizedY *= -1
-        }
+        let normalizedY = calculateVolumeChanges(translationY)
         
         let newVolume = player.volume + normalizedY
 
@@ -115,54 +155,124 @@ const MediaPlayer = () => {
         else if(newVolume <= 0) newVolume = 0.1
 
         player.volume = newVolume
+
+        // Hide volume text after 2 seconds
+        setTimeout(() => {
+          setshowVolume(false);
+        }, 1000);
       }
     });
 
+  const longPressGesture = Gesture.LongPress()
+    .onStart(() => {
+      // console.log('Long press started!');
+      // isPressed.value = true;
+    })
+    .onEnd((event, success) => {
+      // console.log('Long press ended!', success);
+      // isPressed.value = false;
+      if (success) {
+        // Perform action after a successful long press
+        // console.log('Long press successful!');
+        player.seekTo(0)
+      }
+    })
+    .minDuration(750) // Minimum duration in milliseconds for the gesture to be recognized
+    .maxDistance(10); // Maximum distance in points the finger can travel during the long press
+
+  const tapGesture = Gesture.Tap()
+    .onStart(() => {
+      handlePlayButton()
+    }
+  );
+
+  const pinchGesture = Gesture.Pinch()
+    .onUpdate((e) => {
+      // console.log('Pinch scale:', e.scale);
+      if(e.scale > 1){
+        navigation.navigate("Playlist")
+      }
+    }
+  );
+
+  const pinchAndPanGesture = Gesture.Simultaneous(pinchGesture, panGesture);
+  const exclusiveGesture = Gesture.Exclusive(pinchAndPanGesture, longPressGesture, tapGesture);
+
+  const toggleSwitch = () => {
+    setAdvancedModeEnabled(previousState => !previousState)
+  }
+
+  const showHelp = () => {
+    setshowHelpModal(true)
+  }
+
   return (
-    <GestureDetector gesture={panGesture}>
-      <View style={styles.mediaPlayer}>
-        <View style={styles.imageContainer}>
-          <Image
-            style={styles.coverImage}
-            source={currentImage}
-          />
-        </View>
+    <>
+      <HelpModal showHelp={showHelpModal} closeHelp={setshowHelpModal} />
 
-        <View style={styles.musicBarContainer}>
-          <View style={{ flexDirection: "row", justifyContent: "space-between", width: '100%', }}>
-            <Text>{currentTime}</Text>
-            <Text>{formattedSongDuration}</Text>
-          </View>
-          <Slider
-            style={{ width: '100%', margin: 5 }}
-            minimumValue={0}
-            maximumValue={duration}
-            step={1}
-            value={status}
-            onSlidingComplete={(value) => player.seekTo(value)}
-            minimumTrackTintColor="#2e3299ff"
-            maximumTrackTintColor="#000000"
-          />
-          <Text style={{fontSize: 30, textAlign: 'center', margin: 5}}>{currentSong.name}</Text>
-          {/*<Text style={{fontSize: 14, textAlign: 'center', margin: 5}}>Track #{songPosition + 1}</Text>*/}
-        </View>
-
-        <View style={styles.buttonContainer}>
-          <View style={styles.buttonRowContainer}>
-            <MediaButton icon="play-skip-back" size={60} pressOut={() => {changeTrack(-1)}} />
-            <MediaButton icon={isPlay ? "pause-circle" : "play-circle"} size={90} pressOut={handlePlayButton}/>
-            <MediaButton icon="play-skip-forward" size={60} pressOut={() => {changeTrack(1)}} />
-            {/*<MediaButton icon="play-circle" size={90} pressOut={() => player.seekTo(0)} />
-            <MediaButton
-              text="Press You!"
-              pressOut={() => {
-                Alert.alert("Don't Panic!");
-              }}
-            />*/}
-          </View>
-        </View>
+      <View style={styles.sliderContainer}>
+        <Switch
+          onValueChange={toggleSwitch}
+          value={advancedModeEnabled}
+        />
+        <Text style={{fontWeight: 'bold', marginRight: 3}}>Advanced Mode</Text>
+        <Pressable
+          onPress={showHelp}
+        >
+          <Ionicons name={'help-circle-sharp'} size={24} />
+        </Pressable>
       </View>
-    </GestureDetector>
+
+      <GestureDetector gesture={advancedModeEnabled ? exclusiveGesture : Gesture.Exclusive()}>
+        <View style={styles.mediaPlayer}>
+          <View style={styles.imageContainer}>
+            <Image
+              style={styles.coverImage}
+              source={currentImage}
+            />
+          </View>
+
+          <View style={styles.musicBarContainer}>
+            <Text style={{ opacity: showVolume ? 1 : 0 }}>Volume: {Math.round(currentVolume * 100)}%</Text>
+            <View style={{ flexDirection: "row", justifyContent: "space-between", width: '100%', }}>
+              <Text>{currentTime}</Text>
+              <Text>{formattedSongDuration}</Text>
+            </View>
+            <Slider
+              style={{ width: '100%', margin: 5 }}
+              minimumValue={0}
+              maximumValue={duration}
+              step={1}
+              value={status}
+              onSlidingComplete={(value) => player.seekTo(value)}
+              minimumTrackTintColor="#2e3299ff"
+              maximumTrackTintColor="#000000"
+            />
+            <Text style={{fontSize: 30, textAlign: 'center', margin: 5}}>{currentSong.name}</Text>
+            {/*<Text style={{fontSize: 14, textAlign: 'center', margin: 5}}>Track #{songPosition + 1}</Text>*/}
+          </View>
+
+          {
+            !advancedModeEnabled && (
+              <View style={styles.buttonContainer}>
+                <View style={styles.buttonRowContainer}>
+                  <MediaButton icon="play-skip-back" size={60} pressOut={() => {changeTrack(-1)}} />
+                  <MediaButton icon={isPlay ? "pause-circle" : "play-circle"} size={90} pressOut={handlePlayButton}/>
+                  <MediaButton icon="play-skip-forward" size={60} pressOut={() => {changeTrack(1)}} />
+                  {/*<MediaButton icon="play-circle" size={90} pressOut={() => player.seekTo(0)} />
+                  <MediaButton
+                    text="Press You!"
+                    pressOut={() => {
+                      Alert.alert("Don't Panic!");
+                    }}
+                  />*/}
+                </View>
+              </View>
+            )
+          }
+        </View>
+      </GestureDetector>
+    </>
   );
 };
 
@@ -170,6 +280,12 @@ const styles = StyleSheet.create({
   mediaPlayer: {
     flex: 1,
     padding: 8,
+  },
+  sliderContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    marginRight: 8,
   },
   imageContainer: {
     flex:3,
