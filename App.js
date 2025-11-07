@@ -25,6 +25,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SongProvider } from "./context/SongContext";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { SQLiteProvider, useSQLiteContext } from "expo-sqlite";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { manageDBIfNeeded } from "./data/musicdb";
 
