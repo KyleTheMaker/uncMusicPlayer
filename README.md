@@ -48,3 +48,9 @@ https://docs.expo.dev/guides/icons/
 **Tabs Navigator**  
 https://reactnavigation.org/docs/bottom-tab-navigator/?config=dynamic
 
+**Gesture Handler**  
+https://docs.swmansion.com/react-native-gesture-handler/docs/  
+Run `npx expo prebuild` after installing
+
+**Assets**  
+https://pixabay.com/gifs/record-retro-vinyl-music-8329/

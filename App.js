@@ -21,6 +21,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SongProvider } from "./context/SongContext";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { SQLiteProvider, useSQLiteContext } from "expo-sqlite";
@@ -37,10 +38,10 @@ const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
-    <SafeAreaProvider>
-      <SQLiteProvider databaseName="uncMusic.db" onInit={manageDBIfNeeded}>
-        <SongProvider>
-          <GestureHandlerRootView>
+    <GestureHandlerRootView>
+      <SafeAreaProvider>
+        <SQLiteProvider databaseName="uncMusic.db" onInit={manageDBIfNeeded}>
+          <SongProvider>
             <NavigationContainer>
               <Tab.Navigator
                 screenOptions={({ route }) => ({
@@ -60,9 +61,7 @@ export default function App() {
                     }
 
                     // You can return any component that you like here!
-                    return (
-                      <Ionicons name={iconName} size={size} color={color} />
-                    );
+                    return <Ionicons name={iconName} size={size} color={color} />;
                   },
                   tabBarActiveTintColor: "blue",
                   tabBarInactiveTintColor: "gray",
@@ -74,9 +73,9 @@ export default function App() {
                 <Tab.Screen name="Settings" component={SettingsScreen} />
               </Tab.Navigator>
             </NavigationContainer>
-          </GestureHandlerRootView>
-        </SongProvider>
-      </SQLiteProvider>
-    </SafeAreaProvider>
+          </SongProvider>
+        </SQLiteProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
