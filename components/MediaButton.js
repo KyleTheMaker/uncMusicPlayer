@@ -8,12 +8,13 @@
  */
 
 import { StyleSheet, Text, View, Pressable, Alert } from "react-native";
+import { Ionicons } from '@expo/vector-icons';
 
 const MediaButton = (props) => {
   return (
     <View>
       <Pressable style={styles.pressBtn} onPressOut={props.pressOut}>
-        <Text style={styles.text}>{props.text}</Text>
+        <Ionicons name={props.icon} size={props.size} color="blue" />
       </Pressable>
     </View>
   );
@@ -21,11 +22,7 @@ const MediaButton = (props) => {
 
 const styles = StyleSheet.create({
   pressBtn: {
-    backgroundColor: "#ffa",
-    margin: 2,
-    borderWidth: 2,
-    borderRadius: 20,
-    padding: 10,
+    margin: 8,
   },
   text: {
     fontWeight: "bold",

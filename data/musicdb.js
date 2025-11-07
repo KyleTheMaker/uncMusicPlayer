@@ -5,6 +5,19 @@
  *
  */
 
+export const AudioAssetMap = {
+  "./assets/music/afrobeat-chill.mp3": require("../assets/music/afrobeat-chill.mp3"),
+  "./assets/music/cats-and-mushrooms.mp3": require("../assets/music/cats-and-mushrooms.mp3"),
+  "./assets/music/chill-lofi.mp3": require("../assets/music/chill-lofi.mp3"),
+  "./assets/music/chill-lounge-lofi.mp3": require("../assets/music/chill-lounge-lofi.mp3"),
+  "./assets/music/chillhop-in-new-york.mp3": require("../assets/music/chillhop-in-new-york.mp3"),
+  "./assets/music/chillhop-lofi.mp3": require("../assets/music/chillhop-lofi.mp3"),
+  "./assets/music/japanese-magic-lofi.mp3": require("../assets/music/japanese-magic-lofi.mp3"),
+  "./assets/music/jazzy-lofi-rhythm.mp3": require("../assets/music/jazzy-lofi-rhythm.mp3"),
+  "./assets/music/peaceful-lofi.mp3": require("../assets/music/peaceful-lofi.mp3"),
+  "./assets/music/unstoppable-dance.mp3": require("../assets/music/unstoppable-dance.mp3"),
+};
+
 export async function manageDBIfNeeded(db) {
   const DATABASE_VERSION = 1;
 
@@ -20,7 +33,7 @@ export async function manageDBIfNeeded(db) {
     CREATE TABLE IF NOT EXISTS songlist (id INTEGER PRIMARY KEY NOT null, name TEXT UNIQUE NOT null, location TEXT NOT NULL);
     CREATE TABLE IF NOT EXISTS playlist (id INTEGER PRIMARY KEY NOT null, name TEXT UNIQUE NOT null, location TEXT NOT NULL);
     INSERT OR IGNORE INTO playlist (name, location) VALUES ("Fuzzy Cats and Mushrooms", "./assets/music/cats-and-mushrooms.mp3");
-    INSERT OR IGNORE INTO playlist (name, location) VALUES ("Peaceful Lofi", "./assets/music/peacful-lofi.mp3");
+    INSERT OR IGNORE INTO playlist (name, location) VALUES ("Peaceful Lofi", "./assets/music/peaceful-lofi.mp3");
     INSERT OR IGNORE INTO playlist (name, location) VALUES ("Unstoppable Dance", "./assets/music/unstoppable-dance.mp3");
     INSERT OR IGNORE INTO songlist (name, location) VALUES ("Fuzzy Cats and Mushrooms", "./assets/music/cats-and-mushrooms.mp3");
     INSERT OR IGNORE INTO songlist (name, location) VALUES ("Peaceful Lofi", "./assets/music/peaceful-lofi.mp3");
