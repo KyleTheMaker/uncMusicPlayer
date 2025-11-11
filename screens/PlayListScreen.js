@@ -1,17 +1,13 @@
 import { View, Text, StyleSheet } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { SQLiteProvider, useSQLiteContext } from "expo-sqlite";
 import { useState, useContext } from "react";
 import { StatusBar } from "expo-status-bar";
-import { SongContext } from "../context/SongContext";
 
-import { manageDBIfNeeded } from "../data/musicdb";
 
 import PlayList from "../components/PlayList";
 
 export default function PlaylistScreen() {
   const [playSong, setPlaySong] = useState("");
-  const currentSong = useContext(SongContext);
 
   function setSong(song) {
     setPlaySong(song);

@@ -3,7 +3,7 @@
  *
  * This component takes in all saved songs from a database
  * Song's longpress opens an action button - that action button
- * adds the selected song to the database
+ * adds the selected song to the playlist table
  *
  *
  */
@@ -17,8 +17,6 @@ import { getSongListSongs } from "../data/musicdb";
 import { addSongToPlaylist } from "../data/musicdb";
 import Song from "./Song";
 
-{
-}
 const SongList = (props) => {
   const db = useSQLiteContext();
   const [songsList, setSongsList] = useState([]);
@@ -29,8 +27,6 @@ const SongList = (props) => {
   useEffect(() => {
     const loadSongs = async () => {
       const allSongs = await getSongListSongs(db);
-      //confirm data in logs
-      console.log("Fetched Songs:", allSongs);
       setSongsList(allSongs);
     };
     loadSongs();
@@ -67,6 +63,7 @@ const SongList = (props) => {
 
 const styles = StyleSheet.create({
   playlist: {
+    flex: 1,
     backgroundColor: "#8d3434ff",
     justifyContent: "center",
     alignContent: "stretch",

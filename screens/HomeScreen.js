@@ -1,17 +1,5 @@
-/** uncMusicPlayer
- *
- *
- * The MediaPlayer Component handles song control and information
- * SongList lists all songs from the database
- * Playlist lists
- * Longpressing a song name opens the button intended for
- * adding or removing a song from a playlist/songlist
- *
- * TODO:
- * X - List all songs from songlist table into songlist component
- * X - list all songs from playlist table into playlist component
- *  - Songlist Longpress function inserts selected song into playlist table
- *  - Playlist Longpress function removes selected song from playlist table
+/** HomeScreen
+ * currently displays songs from SongList
  *
  *
  */
@@ -22,16 +10,10 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { SQLiteProvider, useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
 
-import MediaPlayer from "../components/MediaPlayer";
-import PlayList from "../components/PlayList";
 import SongList from "../components/SongList";
 import { manageDBIfNeeded } from "../data/musicdb";
 
 export default function App() {
-  /**
-   * logic needed for adding selected song
-   *
-   */
   const [playSong, setPlaySong] = useState("");
 
   function setSong(song) {
@@ -39,31 +21,27 @@ export default function App() {
   }
 
   return (
-    <SafeAreaProvider>
-      <SQLiteProvider databaseName="uncMusic.db" onInit={manageDBIfNeeded}>
-        <SafeAreaView
-          style={{ flex: 1, flexDirection: "column", overflow: "hidden" }}
+      <SafeAreaView
+        style={{ flex: 1, flexDirection: "column", overflow: "hidden" }}
+      >
+        <View style={styles.container}>
+          <Header />
+        </View>
+        <View
+          style={{ flexDirection: "row", flex: 1, justifyContent: "center" }}
         >
-          <View style={styles.container}>
-            <Header />
-          </View>
-          <View
-            style={{ flexDirection: "row", flex: 1, justifyContent: "center" }}
-          >
-            <SongList playSong={setSong} />
-          </View>
-          <StatusBar style="auto" />
-        </SafeAreaView>
-      </SQLiteProvider>
-    </SafeAreaProvider>
+          <SongList playSong={setSong} />
+        </View>
+        <StatusBar style="auto" />
+      </SafeAreaView>
   );
 }
 
 const Header = () => {
   return (
     <View>
-      <Text style={{ textAlign: "center", fontWeight: "bold" }}>
-        Music Player
+      <Text style={{ textAlign: "center", fontWeight: "bold", fontSize: 16, marginTop:12, }}>
+        uncMusicPlayer
       </Text>
     </View>
   );

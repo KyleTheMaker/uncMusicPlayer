@@ -1,7 +1,6 @@
 /**
  *
  * This Component is is to display the playList
- * PlayList data should be provided by database
  * longpressing song in playlist will enable button -
  * that button removes song from playlist (remove from playlist table)
  *
@@ -19,15 +18,13 @@ import Song from "./Song";
 const PlayList = (props) => {
   const db = useSQLiteContext();
   const [songsList, setSongsList] = useState([]);
-  const [playSong, setPlaySong] = useState("");
+  // const [playSong, setPlaySong] = useState(""); // No Longer needed as song is determined by song context
   const { playNewSong } = useSongPlayer();
 
   //we're getting all songs from playlist table to display in a flatlist
   useEffect(() => {
     const loadSongs = async () => {
       const allSongs = await getPlayListSongs(db);
-      //confirm data in logs
-      console.log("Fetched Playlist Songs:", allSongs);
       setSongsList(allSongs);
     };
     loadSongs();
