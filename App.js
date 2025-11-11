@@ -1,20 +1,10 @@
 /** uncMusicPlayer
  *
- *
- * The MediaPlayer Component handles song control and information
- * SongList lists all songs from the database
- * Playlist lists
- * Longpressing a song name opens the button intended for
- * adding or removing a song from a playlist/songlist
- * NavigationContainer is wrapped in SongContext, this allows
- * all screens to have access to the current song by importing
- * useContext and referencing SongContext
- *
- * TODO:
- * X - List all songs from songlist table into songlist component
- * X - list all songs from playlist table into playlist component
- *  - Songlist Longpress function inserts selected song into playlist table
- *  - Playlist Longpress function removes selected song from playlist table
+ * Play from our default songs, or ones stored on your device
+ * Create your own playlist from your favourite songs
+ * Select from multiple song control methods like:
+ * - Buttons
+ * - Screen Gestures
  *
  *
  */

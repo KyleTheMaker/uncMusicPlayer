@@ -15,7 +15,6 @@ import { useState } from "react";
 import { Pressable, Text, Image, StyleSheet, View, Alert } from "react-native";
 
 const Song = (props) => {
-  const [isSelected, setIsSelected] = useState("#ffa");
   const [isVisible, setVisible] = useState(false);
   return (
     <View>
@@ -44,13 +43,6 @@ const Song = (props) => {
     </View>
   );
 };
-
-//this needs to send song location to mediaPlayer
-const playSelectedSong = () => {
-  const songToPlay = props.songLocation;
-};
-//this has special action based on parent - add or remove song
-const actionSelectedSong = () => {};
 
 const styles = StyleSheet.create({
   songItem: {
