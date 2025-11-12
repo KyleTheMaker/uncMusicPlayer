@@ -28,9 +28,6 @@ npx create-expo-app@latest --template blank
 npx expo start --tunnel (for lab computers since they use diff network)  
 npx expo start (for home use)
 
-**Expo Web Package install:**  
-npx expo install react-dom react-native-web @expo/metro-runtime
-
 **Safe Area context for mobile screens:**  
 https://appandflow.github.io/react-native-safe-area-context/
 
