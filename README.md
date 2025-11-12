@@ -18,6 +18,9 @@ A customizable list of songs chosen by the user.
 5. Songlist  
 A list of all songs in the app
 
+6. FileSelector  
+A way to select a music folder from your device, and use that for the audio player.
+
 ## Resources:
 
 **Create project:**  
@@ -54,3 +57,8 @@ Run `npx expo prebuild` after installing
 
 **Assets**  
 https://pixabay.com/gifs/record-retro-vinyl-music-8329/
+
+**Expo FileSystem & DocumentPicker**  
+npx expo install expo-file-system expo-document-picker
+https://docs.expo.dev/versions/v53.0.0/sdk/filesystem/  
+https://docs.expo.dev/versions/v53.0.0/sdk/document-picker/
