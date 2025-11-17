@@ -1,11 +1,20 @@
-import { Text, Button, Image, View, StyleSheet, ScrollView } from "react-native";
+import {
+  Text,
+  Button,
+  Image,
+  View,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
 import { useState, useEffect } from "react";
 import * as DocumentPicker from "expo-document-picker";
-import { Directory, Paths } from "expo-file-system";
-import * as MediaLibrary from 'expo-media-library';
+import { Directory, Paths, File } from "expo-file-system";
+import * as MediaLibrary from "expo-media-library";
 
 /**
  * Exploring expo-media-library
+ * Not sure it's needed; expo-file-system just got updated with dorectory seletion
+ * trying expo-file-system with expo-document-picker again
  */
 
 const FileSelector = () => {
@@ -14,13 +23,14 @@ const FileSelector = () => {
   const [permissionResponse, requestPermission] = MediaLibrary.usePermissions();
 
   async function getAlbums() {
-    if (permissionResponse.status !== 'granted') {
+    if (permissionResponse.status !== "granted") {
       await requestPermission();
     }
     const fetchedAlbums = await MediaLibrary.getAlbumsAsync({
       includeSmartAlbums: true,
     });
     setAlbums(fetchedAlbums);
+    console.log(fetchedAlbums);
   }
 
   return (
@@ -32,18 +42,18 @@ const FileSelector = () => {
     </View>
   );
 
-  // //look for Audio files folder on Phone
-  // const chooseFolder = async () => {
-  //   try {
-  //     const chosenDoc = await DocumentPicker.getDocumentAsync();
-  //     const info = await Directory;
-  //     console.log("awaited File Name: ", chosenDoc.assets[0].name);
-  //     setChosenFolder(chosenDoc);
-  //     console.log("Directory inspect: " + info.name);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  //look for Audio files folder on Phone
+  const chooseFolder = async () => {
+    try {
+      const chosenDoc = await DocumentPicker.getDocumentAsync();
+      const info = await Directory;
+      console.log("awaited File Name: ", chosenDoc.assets[0].name);
+      setChosenFolder(chosenDoc);
+      console.log("Directory inspect: " + info.name);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   // return (
   //   <View>
   //     <Text>This is the FileSelector Component</Text>
@@ -69,12 +79,21 @@ function AlbumEntry({ album }) {
   return (
     <View key={album.id} style={styles.container}>
       <Text>
-        {album.title} - {album.assetCount ?? 'no'} assets
+        {album.title} - {album.assetCount ?? "no"} assets
       </Text>
       <View style={styles.container}>
-        {assets && assets.map((asset) => (
-          <Image source={{ uri: asset.uri }} width={50} height={50} />
-        ))}
+        {assets &&
+          assets.map((asset) => (
+            <Image source={{ uri: asset.uri }} width={50} height={50} />
+          ))}
+      </View>
+      <View>
+        <Text>This is the FileSelector Component</Text>
+        <Text>
+          Chosen File:{" "}
+          {chosenFolder ? toString(chosenFolder) : "No File Chosen."}
+        </Text>
+        <Button title="Choose File" onPress={chooseFolder} />
       </View>
     </View>
   );

@@ -23,8 +23,6 @@
       "edgeToEdgeEnabled": true,
       "permissions": [
         "android.permission.RECORD_AUDIO",
-        "android.permission.MODIFY_AUDIO_SETTINGS",
-        "android.permission.RECORD_AUDIO",
         "android.permission.MODIFY_AUDIO_SETTINGS"
       ],
       "package": "com.anonymous.uncMusicPlayer"
@@ -35,6 +33,11 @@
     "plugins": [
       "expo-audio",
       "expo-sqlite"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "793d74c5-a9fc-4676-b1e5-52a38ca231c2"
+      }
+    }
   }
 }
