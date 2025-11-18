@@ -18,7 +18,7 @@ import * as MediaLibrary from "expo-media-library";
  */
 
 const FileSelector = () => {
-  const [chosenFolder, setChosenFolder] = useState();
+  const [chosenFolder, setChosenFolder] = useState("No File Chosen");
   const [albums, setAlbums] = useState(null);
   const [permissionResponse, requestPermission] = MediaLibrary.usePermissions();
 
@@ -33,27 +33,37 @@ const FileSelector = () => {
     console.log(fetchedAlbums);
   }
 
-  return (
-    <View style={styles.container}>
-      <Button onPress={getAlbums} title="Get albums" />
-      <ScrollView>
-        {albums && albums.map((album) => <AlbumEntry album={album} />)}
-      </ScrollView>
-    </View>
-  );
-
   //look for Audio files folder on Phone
   const chooseFolder = async () => {
     try {
-      const chosenDoc = await DocumentPicker.getDocumentAsync();
-      const info = await Directory;
-      console.log("awaited File Name: ", chosenDoc.assets[0].name);
-      setChosenFolder(chosenDoc);
-      console.log("Directory inspect: " + info.name);
+      const chosenDoc = await DocumentPicker.getDocumentAsync({
+        copyToCacheDirectory: true,
+      });
+      const folder = new File(chosenDoc.assets[0]);
+      console.log("File URI: ", folder.uri);
+      const fileName = chosenDoc.assets[0].name;
+      console.log("awaited File Name: ", fileName);
+      setChosenFolder(fileName);
     } catch (error) {
       console.log(error);
     }
   };
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.section}>
+        <Text>This is the FileSelector Component</Text>
+        <Button title="Choose File" onPress={chooseFolder} />
+        <Text>Chosen File: {chosenFolder}</Text>
+      </View>
+      <Button onPress={getAlbums} title="Get albums" />
+      <ScrollView>
+        {albums &&
+          albums.map((album) => <AlbumEntry album={album} key={album.id} />)}
+      </ScrollView>
+    </View>
+  );
+
   // return (
   //   <View>
   //     <Text>This is the FileSelector Component</Text>
@@ -77,7 +87,7 @@ function AlbumEntry({ album }) {
   }, [album]);
 
   return (
-    <View key={album.id} style={styles.container}>
+    <View key={album.id} style={styles.section}>
       <Text>
         {album.title} - {album.assetCount ?? "no"} assets
       </Text>
@@ -86,14 +96,6 @@ function AlbumEntry({ album }) {
           assets.map((asset) => (
             <Image source={{ uri: asset.uri }} width={50} height={50} />
           ))}
-      </View>
-      <View>
-        <Text>This is the FileSelector Component</Text>
-        <Text>
-          Chosen File:{" "}
-          {chosenFolder ? toString(chosenFolder) : "No File Chosen."}
-        </Text>
-        <Button title="Choose File" onPress={chooseFolder} />
       </View>
     </View>
   );
@@ -105,9 +107,14 @@ const styles = StyleSheet.create({
     // flexDirection: "column",
     paddingBottom: 10,
     marginBottom: 10,
+    marginStart: 8,
+    marginEnd: 8,
     backgroundColor: "#fff",
     alignItems: "stretch",
     justifyContent: "center",
+  },
+  section: {
+    marginBlock: 4,
   },
 });
 
