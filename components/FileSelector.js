@@ -94,7 +94,10 @@ function AlbumEntry({ album }) {
       <View style={styles.container}>
         {assets &&
           assets.map((asset) => (
+            <View key={asset.id}>
             <Image source={{ uri: asset.uri }} width={50} height={50} />
+            <Text>{asset.uri}</Text>
+            </View>
           ))}
       </View>
     </View>
