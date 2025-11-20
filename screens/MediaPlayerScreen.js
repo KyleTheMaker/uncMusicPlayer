@@ -28,12 +28,34 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
+  
+  screen: {
+    flex: 1,
+    backgroundColor: "#e0f2fe", // sky-100
+  },
+
+  
   container: {
     flex: 1,
-    paddingBottom: 4,
-    backgroundColor: "#fff",
+    marginHorizontal: 20,
+    marginTop: 20,
+    marginBottom: 20,
+    padding: 20,
+    borderRadius: 22,
+
+    // Nice smooth sky color
+    backgroundColor: "#bae6fd",
+
+    // Soft drop shadow
+    shadowColor: "#0284c7",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
+    elevation: 8,
+
     justifyContent: "center",
   },
+
   button: {
     margin: 5,
     flexDirection: "row",
