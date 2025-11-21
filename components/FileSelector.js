@@ -30,7 +30,7 @@ const FileSelector = () => {
       includeSmartAlbums: true,
     });
     setAlbums(fetchedAlbums);
-    console.log(fetchedAlbums);
+    console.log(fetchedAlbums.filter((album)=>{return album.title == "Music"}));
   }
 
   //look for Audio files folder on Phone
@@ -56,23 +56,15 @@ const FileSelector = () => {
         <Button title="Choose File" onPress={chooseFolder} />
         <Text>Chosen File: {chosenFolder}</Text>
       </View>
-      <Button onPress={getAlbums} title="Get albums" />
-      <ScrollView>
-        {albums &&
-          albums.map((album) => <AlbumEntry album={album} key={album.id} />)}
-      </ScrollView>
+      <View style={styles.section}>
+        <Button onPress={getAlbums} title="Get albums" />
+        <ScrollView>
+          {albums &&
+            albums.map((album) => <AlbumEntry album={album} key={album.id} />)}
+        </ScrollView>
+      </View>
     </View>
   );
-
-  // return (
-  //   <View>
-  //     <Text>This is the FileSelector Component</Text>
-  //     <Text>
-  //       Chosen File: {chosenFolder ? toString(chosenFolder) : "No File Chosen."}
-  //     </Text>
-  //     <Button title="Choose File" onPress={chooseFolder} />
-  //   </View>
-  // );
 };
 
 function AlbumEntry({ album }) {
@@ -84,6 +76,7 @@ function AlbumEntry({ album }) {
       setAssets(albumAssets.assets);
     }
     getAlbumAssets();
+    console.log("Assets:", {assets});
   }, [album]);
 
   return (
@@ -95,8 +88,8 @@ function AlbumEntry({ album }) {
         {assets &&
           assets.map((asset) => (
             <View key={asset.id}>
-            <Image source={{ uri: asset.uri }} width={50} height={50} />
-            <Text>{asset.uri}</Text>
+              <Image source={{ uri: asset.uri }} width={50} height={50} />
+              <Text>{asset.uri}</Text>
             </View>
           ))}
       </View>
@@ -106,8 +99,6 @@ function AlbumEntry({ album }) {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
-    // flexDirection: "column",
     paddingBottom: 10,
     marginBottom: 10,
     marginStart: 8,
