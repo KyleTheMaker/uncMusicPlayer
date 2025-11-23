@@ -8,9 +8,13 @@ import Song from "./Song";
 import { FlatList } from "react-native-gesture-handler";
 
 /**
- * Exploring expo-media-library
- * Not sure it's needed; expo-file-system just got updated with dorectory seletion
- * trying expo-file-system with expo-document-picker again
+ * Folder holding music can be selected
+ * audio/mp3 files from folder will be listed
+ * clicking will play selected file
+ * TODO:
+ *  - turn folder items into it's own playlist,
+ * where the media play can go back and forth for songs
+ * 
  */
 
 const FileSelector = () => {
