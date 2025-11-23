@@ -32,9 +32,6 @@ export async function manageDBIfNeeded(db) {
     PRAGMA journal_mode = WAL;
     CREATE TABLE IF NOT EXISTS songlist (id INTEGER PRIMARY KEY NOT null, name TEXT UNIQUE NOT null, location TEXT NOT NULL);
     CREATE TABLE IF NOT EXISTS playlist (id INTEGER PRIMARY KEY NOT null, name TEXT UNIQUE NOT null, location TEXT NOT NULL);
-    INSERT OR IGNORE INTO playlist (name, location) VALUES ("Fuzzy Cats and Mushrooms", "./assets/music/cats-and-mushrooms.mp3");
-    INSERT OR IGNORE INTO playlist (name, location) VALUES ("Peaceful Lofi", "./assets/music/peaceful-lofi.mp3");
-    INSERT OR IGNORE INTO playlist (name, location) VALUES ("Unstoppable Dance", "./assets/music/unstoppable-dance.mp3");
     INSERT OR IGNORE INTO songlist (name, location) VALUES ("Fuzzy Cats and Mushrooms", "./assets/music/cats-and-mushrooms.mp3");
     INSERT OR IGNORE INTO songlist (name, location) VALUES ("Peaceful Lofi", "./assets/music/peaceful-lofi.mp3");
     INSERT OR IGNORE INTO songlist (name, location) VALUES ("Unstoppable Dance", "./assets/music/unstoppable-dance.mp3");
