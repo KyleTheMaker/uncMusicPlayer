@@ -26,11 +26,11 @@ export default function App() {
       <View style={styles.container}>
         <Header />
       </View>
-      <View style={{flex:1, marginVertical: 8}}>
-        <FolderSelector style={{flex: 1,}} />
-      </View>
       <View style={{flex: 1, marginVertical: 8}}>
         <SongList playSong={setSong} />
+      </View>
+      <View style={{flex:1, marginVertical: 8}}>
+        <FolderSelector style={{flex: 1,}} />
       </View>
       <StatusBar style="auto" />
     </SafeAreaView>
