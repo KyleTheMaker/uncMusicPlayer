@@ -42,9 +42,8 @@ const SongList = (props) => {
 
   return (
     <View style={styles.playlist}>
-      <Text style={styles.title}>Songs</Text>
+      <Text style={styles.title}>App Songs</Text>
       <FlatList
-        style={{ flex: 1 }}
         data={songsList}
         renderItem={({ item, index }) => (
           <Song
@@ -66,6 +65,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 8,
     paddingTop: 4,
+    margin: 8,
     backgroundColor: "transparent",
   },
   title: {

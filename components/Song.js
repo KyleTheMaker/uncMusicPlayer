@@ -32,7 +32,7 @@ const Song = (props) => {
             style={styles.pressRemove}
             onPressOut={() => {
               props.actionFunction(props.songName, props.songLocation);
-              Alert.alert(props.actionText+" "+props.songName);
+              Alert.alert(props.actionText + " " + props.songName);
             }}
           >
             <Text>{props.actionText}</Text>
@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#ecfdf5",
     paddingVertical: 10,
     paddingHorizontal: 12,
+    margin: 4,
     borderRadius: 12,
     borderWidth: 1,
     borderColor: "#a7f3d0",

@@ -17,7 +17,7 @@ import { FlatList } from "react-native-gesture-handler";
  * 
  */
 
-const FileSelector = () => {
+const FolderSelector = () => {
   const [chosenFolder, setChosenFolder] = useState("No File Chosen");
   const [localSongs, setLocalSongs] = useState([]);
   const [songsList, setSongsList] = useState([]);
@@ -80,14 +80,13 @@ const FileSelector = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.section}>
-        <Text>This is the FileSelector Component</Text>
+        <Text>Select the music folder on your phone!</Text>
         <Button
           title={loading ? "Loading..." : "Choose Folder"}
           onPress={chooseFolder}
           disabled={loading}
         />
-        <Text>Chosen Folder: {chosenFolder}</Text>
+        <Text style={styles.title}>{chosenFolder} Folder Songs</Text>
         <FlatList
           data={localSongs}
           renderItem={({ item, index }) => (
@@ -100,7 +99,6 @@ const FileSelector = () => {
           )}
           keyExtractor={(item) => item.uri}
         />
-      </View>
     </View>
   );
 };
@@ -111,13 +109,17 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginStart: 8,
     marginEnd: 8,
-    backgroundColor: "#fff",
+    backgroundColor: "transparent",
     alignItems: "stretch",
     justifyContent: "center",
   },
-  section: {
-    marginBlock: 4,
+  title: {
+    fontWeight: "800",
+    textAlign: "center",
+    marginBottom: 8,
+    fontSize: 20,
+    color: "#064e3b",
   },
 });
 
-export default FileSelector;
+export default FolderSelector;
