@@ -13,14 +13,14 @@ import { useSQLiteContext } from "expo-sqlite";
 import { useState, useEffect } from "react";
 import { useSongPlayer } from "../context/SongContext";
 
-import { getSongListSongs } from "../data/musicdb";
-import { addSongToPlaylist } from "../data/musicdb";
+// import { getSongListSongs } from "../data/musicdb";
+import { addSongToPlaylist, getSongListSongs } from "../data/musicdb";
 import Song from "./Song";
 
 const SongList = (props) => {
   const db = useSQLiteContext();
   const [songsList, setSongsList] = useState([]);
-  const [playSong, setPlaySong] = useState("");
+  // const [playSong, setPlaySong] = useState("");
   const {playNewSong} = useSongPlayer();
 
   //we're getting all songs from songlist table and display in flatlist
