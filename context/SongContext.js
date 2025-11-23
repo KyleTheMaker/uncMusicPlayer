@@ -67,8 +67,10 @@ export const SongProvider = ({ children }) => {
     if (typeof songLocation === 'string' && songLocation.startsWith('file://')) {
        console.log("Playing local file:", songLocation);
        asset = songLocation;
-    }else{
+    }else if (AudioAssetMap[songLocation]){
       asset = AudioAssetMap[songLocation];
+    }else if (typeof songLocation === 'number'){
+      asset = songLocation;
     }
     if (asset) {
       //sets the require function in the location
@@ -96,13 +98,25 @@ export const SongProvider = ({ children }) => {
     }
 
     const nextSong = currentList[newIndex];
+    let asset = null;
 
-    const asset = AudioAssetMap[nextSong.location];
-    setPlayerState({
-      currentSong: { location: asset, name: nextSong.name },
-      currentList: currentList,
-      currentIndex: newIndex,
-    });
+    if (typeof nextSong.location === 'string' && nextSong.location.startsWith('file://')) {
+       console.log("Playing local file:", nextSong.location);
+       asset = nextSong.location;
+    }else if (AudioAssetMap[nextSong.location]){
+      asset = AudioAssetMap[nextSong.location];
+    }else if (typeof nextSong.location === 'number'){
+      asset = nextSong.location;
+    }
+    if(asset){
+      setPlayerState({
+        currentSong: { location: asset, name: nextSong.name },
+        currentList: currentList,
+        currentIndex: newIndex,
+      });
+    }else {
+      console.error("location not found for next song: ", nextSong.location);
+    }
   }
 
   const contextValue = {

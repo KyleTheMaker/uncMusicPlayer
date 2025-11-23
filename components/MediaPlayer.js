@@ -67,9 +67,11 @@ const MediaPlayer = () => {
   // play when song changed
   useEffect(() => {
     // console.log(currentSong)
+    if(currentSong.location){
     player.replace(currentSong.location);
     player.play();
     setIsPlay(true);
+    }
   }, [currentSong]);
 
   // change image when isPlay variable changed

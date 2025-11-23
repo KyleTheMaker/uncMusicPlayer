@@ -50,13 +50,26 @@ const FolderSelector = () => {
     }
   };
 
-  const handleAddSong = async (name) => {
+  const handleAddSong = async (songItem) => {
     try {
-      if (localSongUri) {
-        await addSongToPlaylist(db, name, localSongUri);
-      }else{
-        console.log("local song URI empty: ", localSongUri);
+      const localMusicDirectory = new Directory(
+        Paths.document,
+        "localMusicStorage"
+      );
+      if (!localMusicDirectory.exists) {
+        await localMusicDirectory.create();
       }
+      const targetSong = new File(localMusicDirectory, songItem.name);
+
+      if (!targetSong.exists) {
+        await FileSystem.copyAsync({
+          from: songFile.uri,
+          to: targetSong.uri,
+        });
+      } 
+
+      await addSongToPlaylist(db, songItem.name, targetSong.uri);
+
     } catch (error) {
       console.log("error adding song to db: ", error);
     }
@@ -111,8 +124,8 @@ const FolderSelector = () => {
             songName={item.name}
             actionText={"Add Song"}
             songLocation={item.uri}
-            playSong={() => handlePlaySong(item, songsList, index)}
-            actionFunction={handleAddSong}
+            playSong={() => handlePlaySong(item, localSongs, index)}
+            actionFunction={() => handleAddSong(item)}
           />
         )}
         keyExtractor={(item) => item.uri}
