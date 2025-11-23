@@ -62,7 +62,14 @@ export const SongProvider = ({ children }) => {
   const {currentSong, currentList, currentIndex} = playerState;
 
   function playNewSong(songLocation, songName, listArray, listIndex) {
-    const asset = AudioAssetMap[songLocation];
+    let asset = null;
+    
+    if (typeof songLocation === 'string' && songLocation.startsWith('file://')) {
+       console.log("Playing local file:", songLocation);
+       asset = songLocation;
+    }else{
+      asset = AudioAssetMap[songLocation];
+    }
     if (asset) {
       //sets the require function in the location
       setPlayerState({
