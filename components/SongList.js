@@ -64,14 +64,16 @@ const SongList = (props) => {
 const styles = StyleSheet.create({
   playlist: {
     flex: 1,
-    backgroundColor: "#8d3434ff",
-    justifyContent: "center",
-    alignContent: "stretch",
+    paddingHorizontal: 8,
+    paddingTop: 4,
+    backgroundColor: "transparent",
   },
   title: {
-    fontWeight: "bold",
+    fontWeight: "800",
     textAlign: "center",
-    textAlignVertical: "auto",
+    marginBottom: 8,
+    fontSize: 20,
+    color: "#064e3b",
   },
 });
 

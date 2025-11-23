@@ -14,7 +14,7 @@ const MediaButton = (props) => {
   return (
     <View>
       <Pressable style={styles.pressBtn} onPressOut={props.pressOut}>
-        <Ionicons name={props.icon} size={props.size} color="blue" />
+        <Ionicons name={props.icon} size={props.size} color="#064e3b" />
       </Pressable>
     </View>
   );
@@ -23,10 +23,15 @@ const MediaButton = (props) => {
 const styles = StyleSheet.create({
   pressBtn: {
     margin: 8,
-  },
-  text: {
-    fontWeight: "bold",
-    color: "blue",
+    padding: 10,
+    borderRadius: 12,
+
+    backgroundColor: "#a7f3d0",
+    shadowColor: "#0d9488",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 6,
   },
 });
 
