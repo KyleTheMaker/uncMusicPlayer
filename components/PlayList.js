@@ -61,20 +61,21 @@ const PlayList = (props) => {
 
 const styles = StyleSheet.create({
   playlist: {
-    backgroundColor: "#8d3434ff",
     flex: 1,
-    justifyContent: "center",
-    alignContent: "stretch",
-    paddingEnd: 10,
+    paddingHorizontal: 8,
+    paddingTop: 4,
+    backgroundColor: "transparent",
   },
   title: {
-    fontWeight: "bold",
+    fontWeight: "800",
     textAlign: "center",
-    textAlignVertical: "auto",
+    marginBottom: 8,
+    fontSize: 20,
+    color: "#064e3b",
   },
   addRemove: {
     marginEnd: 2,
-    backgroundColor: "#ffa",
+    backgroundColor: "#a7f3d0",
   },
 });
 

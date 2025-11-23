@@ -26,45 +26,69 @@ const HelpModal = (props) => {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  bold: {
+    fontWeight: "bold",
+    color: "#064e3b",
   },
-  closeButton: {
-    backgroundColor: '#d9534f',
-    padding: 10,
-    borderRadius: 6,
-    marginTop: 20,
-  },
-  buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
+
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "rgba(0,0,0,0.45)",
+    justifyContent: "center",
+    alignItems: "center",
   },
+
   modalContent: {
-    backgroundColor: 'white',
-    padding: 24,
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    minWidth: 250,
+    backgroundColor: "#ecfdf5",       
+    padding: 26,
+    borderRadius: 18,
+    minWidth: 260,
+    alignItems: "center",
+
+    shadowColor: "#0d9488",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 10,
+
+    borderWidth: 1,
+    borderColor: "#a7f3d0", 
   },
-  modalText: {
-    fontSize: 14,
-    textAlign: 'center',
-  },
+
   modalTitle: {
-    fontSize: 18,
-    textAlign: 'center',
-    fontWeight: 'bold',
-    margin: 8,
+    fontSize: 20,
+    fontWeight: "800",
+    color: "#064e3b",
+    marginBottom: 12,
+    textAlign: "center",
   },
-})
+
+  modalText: {
+    fontSize: 15,
+    color: "#065f46",
+    textAlign: "center",
+    marginVertical: 4,
+  },
+
+  closeButton: {
+    backgroundColor: "#0f766e",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    marginTop: 20,
+
+    shadowColor: "#0d9488",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 4,
+  },
+
+  buttonText: {
+    color: "#ecfdf5",
+    fontWeight: "700",
+    fontSize: 15,
+  },
+});
 
 export default HelpModal

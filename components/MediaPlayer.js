@@ -289,13 +289,20 @@ const MediaPlayer = () => {
 const styles = StyleSheet.create({
   mediaPlayer: {
     flex: 1,
-    padding: 8,
+    padding: 12,
   },
   sliderContainer: {
     flexDirection: "row",
     justifyContent: "flex-end",
     alignItems: "center",
     marginRight: 8,
+    marginTop: 4,
+    gap: 6,
+  },
+  advancedLabel: {
+    fontWeight: "bold",
+    marginRight: 3,
+    color: "#064e3b",
   },
   imageContainer: {
     flex: 3,
@@ -303,14 +310,43 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   coverImage: {
-    width: 350,
-    height: 350,
+    width: 260,
+    height: 260,
+    borderRadius: 20,
     resizeMode: "cover",
   },
   musicBarContainer: {
     flex: 2,
     justifyContent: "center",
     alignItems: "center",
+    paddingHorizontal: 12,
+    marginTop: 8,
+  },
+  volumeText: {
+    color: "#0f766e",
+    fontWeight: "600",
+    marginBottom: 4,
+  },
+  timeRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    marginBottom: 4,
+  },
+  timeText: {
+    color: "#065f46",
+    fontSize: 13,
+  },
+  slider: {
+    width: "100%",
+    marginVertical: 6,
+  },
+  songTitle: {
+    fontSize: 22,
+    textAlign: "center",
+    marginTop: 6,
+    fontWeight: "700",
+    color: "#022c22",
   },
   buttonContainer: {
     flex: 1,
