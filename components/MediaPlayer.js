@@ -13,7 +13,6 @@ import {
   Pressable,
   Alert,
   Image,
-  Switch,
   Modal,
 } from "react-native";
 import { useState, useEffect } from "react";
@@ -66,7 +65,6 @@ const MediaPlayer = () => {
 
   // play when song changed
   useEffect(() => {
-    // console.log(currentSong)
     if(currentSong.location){
     player.replace(currentSong.location);
     player.play();
@@ -86,7 +84,7 @@ const MediaPlayer = () => {
   const formatTime = (totalSeconds) => {
     const mins = Math.floor(totalSeconds / 60);
     const secs = totalSeconds % 60;
-    const formattedSecs = secs < 10 ? `0${secs.toFixed(0)}` : secs.toFixed(0);
+    const formattedSecs = secs < 10 ? `0${Math.floor(secs)}` : Math.floor(secs);
     return `${mins}:${formattedSecs}`;
   };
 
@@ -105,15 +103,6 @@ const MediaPlayer = () => {
     const delta = clamped / MAX_TRANSLATION_Y;
 
     return value > 0 ? -delta : delta; // down = negative, up = positive
-
-    // let normalizedY = Math.min(Math.abs(value) / MAX_TRANSLATION_Y, 1); // normalized value between 0-1
-
-    // if (value > 20) {
-    //   // swiped down, decrease volume
-    //   normalizedY *= -1
-    // }
-
-    // return normalizedY
   };
 
   const panGesture = Gesture.Pan()
@@ -165,17 +154,7 @@ const MediaPlayer = () => {
 
   const longPressGesture = Gesture.LongPress()
     .onStart(() => {
-      // console.log('Long press started!');
-      // isPressed.value = true;
-    })
-    .onEnd((event, success) => {
-      // console.log('Long press ended!', success);
-      // isPressed.value = false;
-      if (success) {
-        // Perform action after a successful long press
-        // console.log('Long press successful!');
-        player.seekTo(0);
-      }
+      player.seekTo(0);
     })
     .minDuration(750) // Minimum duration in milliseconds for the gesture to be recognized
     .maxDistance(10); // Maximum distance in points the finger can travel during the long press
@@ -184,8 +163,15 @@ const MediaPlayer = () => {
     handlePlayButton();
   });
 
+  const doubleTap = Gesture.Tap()
+    .maxDuration(500)
+    .numberOfTaps(2)
+    .onStart(() => {
+      setAdvancedModeEnabled((previousState) => !previousState);
+    }
+  );
+
   const pinchGesture = Gesture.Pinch().onUpdate((e) => {
-    // console.log('Pinch scale:', e.scale);
     if (e.scale > 1) {
       navigation.navigate("Playlist");
     }
@@ -195,12 +181,9 @@ const MediaPlayer = () => {
   const exclusiveGesture = Gesture.Exclusive(
     pinchAndPanGesture,
     longPressGesture,
+    doubleTap,
     tapGesture
   );
-
-  const toggleSwitch = () => {
-    setAdvancedModeEnabled((previousState) => !previousState);
-  };
 
   const showHelp = () => {
     setshowHelpModal(true);
@@ -210,9 +193,8 @@ const MediaPlayer = () => {
     <>
       <HelpModal showHelp={showHelpModal} closeHelp={setshowHelpModal} />
 
-      <View style={styles.sliderContainer}>
-        <Switch onValueChange={toggleSwitch} value={advancedModeEnabled} />
-        <Text style={{ fontWeight: "bold", marginRight: 3 }}>
+      <View style={styles.helpContainer}>
+        <Text style={{ fontWeight: "bold" }}>
           Advanced Mode
         </Text>
         <Pressable onPress={showHelp}>
@@ -221,7 +203,7 @@ const MediaPlayer = () => {
       </View>
 
       <GestureDetector
-        gesture={advancedModeEnabled ? exclusiveGesture : Gesture.Exclusive()}
+        gesture={advancedModeEnabled ? exclusiveGesture : doubleTap }
       >
         <View style={styles.mediaPlayer}>
           <View style={styles.imageContainer}>
@@ -262,19 +244,19 @@ const MediaPlayer = () => {
               <View style={styles.buttonRowContainer}>
                 <MediaButton
                   icon="play-skip-back"
-                  size={60}
+                  size={50}
                   pressOut={() => {
                     changeTrack(-1);
                   }}
                 />
                 <MediaButton
                   icon={isPlay ? "pause-circle" : "play-circle"}
-                  size={90}
+                  size={70}
                   pressOut={handlePlayButton}
                 />
                 <MediaButton
                   icon="play-skip-forward"
-                  size={60}
+                  size={50}
                   pressOut={() => {
                     changeTrack(1);
                   }}
@@ -291,9 +273,9 @@ const MediaPlayer = () => {
 const styles = StyleSheet.create({
   mediaPlayer: {
     flex: 1,
-    padding: 12,
+    // padding: 12,
   },
-  sliderContainer: {
+  helpContainer: {
     flexDirection: "row",
     justifyContent: "flex-end",
     alignItems: "center",
