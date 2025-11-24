@@ -260,19 +260,19 @@ const MediaPlayer = () => {
               <View style={styles.buttonRowContainer}>
                 <MediaButton
                   icon="play-skip-back"
-                  size={60}
+                  size={50}
                   pressOut={() => {
                     changeTrack(-1);
                   }}
                 />
                 <MediaButton
                   icon={isPlay ? "pause-circle" : "play-circle"}
-                  size={90}
+                  size={70}
                   pressOut={handlePlayButton}
                 />
                 <MediaButton
                   icon="play-skip-forward"
-                  size={60}
+                  size={50}
                   pressOut={() => {
                     changeTrack(1);
                   }}
@@ -289,7 +289,7 @@ const MediaPlayer = () => {
 const styles = StyleSheet.create({
   mediaPlayer: {
     flex: 1,
-    padding: 12,
+    // padding: 12,
   },
   sliderContainer: {
     flexDirection: "row",

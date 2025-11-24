@@ -23,8 +23,8 @@ const MediaButton = (props) => {
 const styles = StyleSheet.create({
   pressBtn: {
     margin: 8,
-    padding: 10,
-    borderRadius: 12,
+    padding: 8,
+    borderRadius: 40,
 
     backgroundColor: "#a7f3d0",
     shadowColor: "#0d9488",
