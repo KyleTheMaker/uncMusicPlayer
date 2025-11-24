@@ -22,25 +22,13 @@ export default function App() {
       <View style={styles.container}>
         <MediaPlayer />
       </View>
-      <StatusBar style="auto" />
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
-  
-  screen: {
-    flex: 1,
-    backgroundColor: "#e0f2fe", // sky-100
-  },
-
-  
+const styles = StyleSheet.create({  
   container: {
     flex: 1,
-    marginHorizontal: 20,
-    marginTop: 20,
-    marginBottom: 20,
-    padding: 20,
     borderRadius: 22,
 
     // Nice smooth sky color
@@ -52,13 +40,5 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 10,
     elevation: 8,
-
-    justifyContent: "center",
-  },
-
-  button: {
-    margin: 5,
-    flexDirection: "row",
-    justifyContent: "space-between",
   },
 });
