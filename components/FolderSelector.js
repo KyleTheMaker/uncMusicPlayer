@@ -20,7 +20,7 @@ import { FlatList } from "react-native-gesture-handler";
  */
 
 const FolderSelector = () => {
-  const [chosenFolder, setChosenFolder] = useState("No File Chosen");
+  const [chosenFolder, setChosenFolder] = useState("");
   const [localSongs, setLocalSongs] = useState([]);
   const [localSongUri, setLocalSongUri] = useState();
   const [songsList, setSongsList] = useState([]);
@@ -54,7 +54,7 @@ const FolderSelector = () => {
       const correctedSongs = await Promise.all(
         directoryItems.map(async (item) => {
           const originalName = item.name;
-          const safeName = originalName.replace(/[^\w\s\-\.]/g, '');
+          const safeName = originalName.replace(/[^\w\s\-\.]/g, "");
 
           const targetSong = new File(localMusicDirectory, safeName);
           if (!targetSong.exists) {
@@ -96,13 +96,13 @@ const FolderSelector = () => {
 
   return (
     <View style={styles.container}>
-      <Text>Select the music folder on your phone!</Text>
+      <Text style={styles.title}>{chosenFolder ? `${chosenFolder} Folder Songs` : "No Folder Selected"}</Text>
       <Button
         title={loading ? "Loading..." : "Choose Folder"}
         onPress={chooseFolder}
         disabled={loading}
       />
-      <Text style={styles.title}>{chosenFolder} Folder Songs</Text>
+      <Text>Select the music folder on your phone!</Text>
       <FlatList
         data={localSongs}
         renderItem={({ item, index }) => (
