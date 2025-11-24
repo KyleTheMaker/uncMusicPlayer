@@ -42,7 +42,35 @@ const FolderSelector = () => {
       const directoryItems = directory.list().filter((item) => {
         return item instanceof File && item.type == "audio/mpeg";
       });
-      setLocalSongs(directoryItems);
+
+      const localMusicDirectory = new Directory(
+        Paths.document,
+        "localMusicStorage"
+      );
+      if (!localMusicDirectory.exists) {
+        await localMusicDirectory.create();
+      }
+
+      const correctedSongs = await Promise.all(
+        directoryItems.map(async (item) => {
+          const originalName = item.name;
+          const safeName = originalName.replace(/[^\w\s\-\.]/g, '');
+
+          const targetSong = new File(localMusicDirectory, safeName);
+          if (!targetSong.exists) {
+            await FileSystem.copyAsync({
+              from: item.uri,
+              to: targetSong.uri,
+            });
+          }
+          return {
+            name: item.name,
+            location: targetSong.uri,
+            externalUri: item.uri,
+          };
+        })
+      );
+      setLocalSongs(correctedSongs);
     } catch (error) {
       console.error(error);
     } finally {
@@ -52,24 +80,7 @@ const FolderSelector = () => {
 
   const handleAddSong = async (songItem) => {
     try {
-      const localMusicDirectory = new Directory(
-        Paths.document,
-        "localMusicStorage"
-      );
-      if (!localMusicDirectory.exists) {
-        await localMusicDirectory.create();
-      }
-      const targetSong = new File(localMusicDirectory, songItem.name);
-
-      if (!targetSong.exists) {
-        await FileSystem.copyAsync({
-          from: songFile.uri,
-          to: targetSong.uri,
-        });
-      } 
-
-      await addSongToPlaylist(db, songItem.name, targetSong.uri);
-
+      await addSongToPlaylist(db, songItem.name, songItem.location);
     } catch (error) {
       console.log("error adding song to db: ", error);
     }
@@ -77,32 +88,7 @@ const FolderSelector = () => {
 
   const handlePlaySong = async (songFile, listArray, listIndex) => {
     try {
-      if (!(songFile instanceof File)) {
-        throw new Error("Invalid file object passed to play handler.");
-      }
-      // create or access local music directory for copying songFile to
-      const localMusicDirectory = new Directory(
-        Paths.document,
-        "localMusicStorage"
-      );
-
-      if (!localMusicDirectory.exists) {
-        await localMusicDirectory.create();
-      }
-      const localSong = new File(localMusicDirectory, songFile.name);
-
-      if (localSong.exists) {
-        console.log(`Song already in cache, playing ${localSong.uri}`);
-      } else {
-        await FileSystem.copyAsync({
-          from: songFile.uri,
-          to: localSong.uri,
-        });
-        setLocalSongUri(localSong.uri);
-        console.log(`Song copied to local cache: ${localSong.name}`);
-      }
-
-      playNewSong(localSong.uri, localSong.name, listArray, listIndex);
+      playNewSong(songFile.location, songFile.name, listArray, listIndex);
     } catch (error) {
       console.error("error playing song", error);
     }
@@ -123,12 +109,12 @@ const FolderSelector = () => {
           <Song
             songName={item.name}
             actionText={"Add Song"}
-            songLocation={item.uri}
+            songLocation={item.location}
             playSong={() => handlePlaySong(item, localSongs, index)}
             actionFunction={() => handleAddSong(item)}
           />
         )}
-        keyExtractor={(item) => item.uri}
+        keyExtractor={(item) => item.location}
       />
     </View>
   );
