@@ -13,14 +13,14 @@ import { useSQLiteContext } from "expo-sqlite";
 import { useState, useEffect } from "react";
 import { useSongPlayer } from "../context/SongContext";
 
-import { getSongListSongs } from "../data/musicdb";
-import { addSongToPlaylist } from "../data/musicdb";
+// import { getSongListSongs } from "../data/musicdb";
+import { addSongToPlaylist, getSongListSongs } from "../data/musicdb";
 import Song from "./Song";
 
 const SongList = (props) => {
   const db = useSQLiteContext();
   const [songsList, setSongsList] = useState([]);
-  const [playSong, setPlaySong] = useState("");
+  // const [playSong, setPlaySong] = useState("");
   const {playNewSong} = useSongPlayer();
 
   //we're getting all songs from songlist table and display in flatlist
@@ -42,9 +42,8 @@ const SongList = (props) => {
 
   return (
     <View style={styles.playlist}>
-      <Text style={styles.title}>Songs</Text>
+      <Text style={styles.title}>App Songs</Text>
       <FlatList
-        style={{ flex: 1 }}
         data={songsList}
         renderItem={({ item, index }) => (
           <Song
@@ -66,6 +65,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 8,
     paddingTop: 4,
+    margin: 8,
     backgroundColor: "transparent",
   },
   title: {

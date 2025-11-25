@@ -16,7 +16,6 @@ export const SongContext = createContext({
   isLoading: true,
 });
 
-
 export const SongProvider = ({ children }) => {
   const db = useSQLiteContext();
   const [isLoading, setIsLoading] = useState(true);
@@ -29,23 +28,26 @@ export const SongProvider = ({ children }) => {
     currentIndex: -1,
   });
 
-  useEffect(()=>{
-    if(db && isLoading){
+  useEffect(() => {
+    if (db && isLoading) {
       async function initializePlayer() {
-        try{
+        try {
           const initialList = await getSongListSongs(db);
-          if(initialList && initialList.length > 0){
+          if (initialList && initialList.length > 0) {
             const firstSong = initialList[0];
             const firstAsset = AudioAssetMap[firstSong.location];
 
-            if(firstAsset){
+            if (firstAsset) {
               setPlayerState({
-                currentSong: {location: firstAsset, name: firstSong.name},
+                currentSong: { location: firstAsset, name: firstSong.name },
                 currentList: initialList,
                 currentIndex: 0,
               });
             } else {
-              console.error("Asset not found for first song: ", firstSong.location);
+              console.error(
+                "Asset not found for first song: ",
+                firstSong.location
+              );
             }
           }
         } catch (error) {
@@ -56,13 +58,24 @@ export const SongProvider = ({ children }) => {
       }
       initializePlayer();
     }
-
   }, [db]);
 
-  const {currentSong, currentList, currentIndex} = playerState;
+  const { currentSong, currentList, currentIndex } = playerState;
 
   function playNewSong(songLocation, songName, listArray, listIndex) {
-    const asset = AudioAssetMap[songLocation];
+    let asset = null;
+
+    if (
+      typeof songLocation === "string" &&
+      songLocation.startsWith("file://")
+    ) {
+      console.log("Playing local file:", songLocation);
+      asset = songLocation;
+    } else if (AudioAssetMap[songLocation]) {
+      asset = AudioAssetMap[songLocation];
+    } else if (typeof songLocation === "number") {
+      asset = songLocation;
+    }
     if (asset) {
       //sets the require function in the location
       setPlayerState({
@@ -89,13 +102,33 @@ export const SongProvider = ({ children }) => {
     }
 
     const nextSong = currentList[newIndex];
+    const songLocation = nextSong.location || nextSong.uri;
+    if (!songLocation) {
+      console.error("Location not found for next song: ", nextSong);
+      return;
+    }
+    let asset = null;
 
-    const asset = AudioAssetMap[nextSong.location];
-    setPlayerState({
-      currentSong: { location: asset, name: nextSong.name },
-      currentList: currentList,
-      currentIndex: newIndex,
-    });
+    if (
+      typeof songLocation === "string" &&
+      songLocation.startsWith("file://")
+    ) {
+      console.log("Playing local file:", songLocation);
+      asset = songLocation;
+    } else if (AudioAssetMap[songLocation]) {
+      asset = AudioAssetMap[songLocation];
+    } else if (typeof songLocation === "number") {
+      asset = songLocation;
+    }
+    if (asset) {
+      setPlayerState({
+        currentSong: { location: asset, name: nextSong.name },
+        currentList: currentList,
+        currentIndex: newIndex,
+      });
+    } else {
+      console.error("location not found for next song: ", songLocation);
+    }
   }
 
   const contextValue = {

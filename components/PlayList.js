@@ -9,8 +9,9 @@
 
 import { StyleSheet, Text, View, Pressable, FlatList } from "react-native";
 import { useSQLiteContext } from "expo-sqlite";
-import { useState, useEffect } from "react";
-import { getPlayListSongs } from "../data/musicdb";
+import { useState, useEffect, useCallback } from "react";
+import { getPlayListSongs, removeSongFromPlaylist } from "../data/musicdb";
+import { useFocusEffect } from "@react-navigation/native";
 import { useSongPlayer } from "../context/SongContext";
 
 import Song from "./Song";
@@ -18,20 +19,34 @@ import Song from "./Song";
 const PlayList = (props) => {
   const db = useSQLiteContext();
   const [songsList, setSongsList] = useState([]);
-  // const [playSong, setPlaySong] = useState(""); // No Longer needed as song is determined by song context
   const { playNewSong } = useSongPlayer();
 
   //we're getting all songs from playlist table to display in a flatlist
-  useEffect(() => {
-    const loadSongs = async () => {
-      const allSongs = await getPlayListSongs(db);
-      setSongsList(allSongs);
-    };
-    loadSongs();
-  }, [db]);
+  // useEffect(() => {
+  //   loadSongs();
+  // }, [db]);
 
-    const handleRemoveSong = async (name) => {
-    await removeSongFromPlaylist(db, name);
+  useFocusEffect(
+    useCallback(() => {
+      loadSongs();
+    }, [])
+  );
+
+  const loadSongs = async () => {
+    const allSongs = await getPlayListSongs(db);
+    setSongsList(allSongs);
+  };
+
+  const handleRemoveSong = async (name) => {
+    //remove chosen song from list
+    const newList = songsList.filter((song) => song.name !== name);
+    setSongsList(newList);
+    try {
+      await removeSongFromPlaylist(db, name);
+    } catch (error) {
+      console.log("Error removing song from db: ", error);
+      loadSongs();
+    }
   };
 
   const handlePlaySong = (location, name, listArray, listIndex) => {
@@ -49,8 +64,10 @@ const PlayList = (props) => {
             songName={item.name}
             actionText={"Remove Song"}
             songLocation={item.location}
-            playSong={(location,name) => handlePlaySong(location, name, songsList, index)}
-            actionFunction={handleRemoveSong}
+            playSong={(location, name) =>
+              handlePlaySong(location, name, songsList, index)
+            }
+            actionFunction={() => handleRemoveSong(item.name)}
           />
         )}
         keyExtractor={(song) => song.id.toString()}
