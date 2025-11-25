@@ -55,7 +55,6 @@ Run `npx expo prebuild` after installing
 **Assets**  
 https://pixabay.com/gifs/record-retro-vinyl-music-8329/
 
-**Expo FileSystem & DocumentPicker**  
-npx expo install expo-file-system expo-document-picker
-https://docs.expo.dev/versions/v53.0.0/sdk/filesystem/  
-https://docs.expo.dev/versions/v53.0.0/sdk/document-picker/
+**Expo FileSystem**  
+npx expo install expo-file-system
+https://docs.expo.dev/versions/v53.0.0/sdk/filesystem/
