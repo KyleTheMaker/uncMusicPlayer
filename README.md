@@ -1,6 +1,6 @@
 # **UncMusicPlayer**
 
-This music player offers track control through buttons, gestures, camera input, and BT Mouse input.
+This music player offers track control through touch buttons, gestures, and BT Mouse input.
 
 ## Components
 1. Song  
@@ -19,7 +19,16 @@ A customizable list of songs chosen by the user.
 A list of all songs in the app
 
 6. FileSelector  
-A way to select a music folder from your device, and use that for the audio player.
+A way to select a music folder from your device, and use that for the audio player.  
+
+7. HelpModal  
+Presents advanced mode instructions.  
+
+8. BluetoothScanButton  
+A component for styling a bluetooth scanner button
+# Combined Components Description  
+ - MediaPlayer uses the MediaButton for touch control  
+ - SongList and Playlist both use the song component for listing out all songs 
 
 ## Resources:
 
