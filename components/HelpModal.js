@@ -11,12 +11,18 @@ const HelpModal = (props) => {
       <View style={styles.overlay}>
         <View style={styles.modalContent}>
           <Text style={styles.modalTitle}>Advanced Mode</Text>
+          <Text style={styles.modalFeature}>Touch features:</Text>
           <Text style={styles.modalText}><Text style={{fontWeight:'bold'}}>Enable/Disable Advanced Mode</Text>: Double tap</Text>
           <Text style={styles.modalText}><Text style={{fontWeight:'bold'}}>Volume Control</Text>: Swipe up or down</Text>
           <Text style={styles.modalText}><Text style={{fontWeight:'bold'}}>Track Control</Text>: Swipe left or right</Text>
           <Text style={styles.modalText}><Text style={{fontWeight:'bold'}}>Rewind Song</Text>: Long press</Text>
           <Text style={styles.modalText}><Text style={{fontWeight:'bold'}}>Play or Pause</Text>: Single tap</Text>
           <Text style={styles.modalText}><Text style={{fontWeight:'bold'}}>Go to Playlist</Text>: Pinch out (zoom in)</Text>
+          <Text style={styles.modalText}></Text>
+          <Text style={styles.modalFeature}>Mouse Features:</Text>
+          <Text style={styles.modalText}><Text style={{fontWeight:'bold'}}>Play/Pause</Text>: Single Click</Text>
+          <Text style={styles.modalText}><Text style={{fontWeight:'bold'}}>Next Song</Text>: Double click</Text>
+          <Text style={styles.modalText}><Text style={{fontWeight:'bold'}}>Previous Song</Text>: Triple Click</Text>
           <Pressable onPress={() => props.closeHelp(false)} style={styles.closeButton}>
             <Text style={styles.buttonText}>Close</Text>
           </Pressable>
@@ -44,7 +50,7 @@ const styles = StyleSheet.create({
     padding: 26,
     borderRadius: 18,
     minWidth: 260,
-    alignItems: "center",
+    alignItems: "stretch",
 
     shadowColor: "#0d9488",
     shadowOffset: { width: 0, height: 6 },
@@ -64,10 +70,17 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 
+  modalFeature: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "#065f46",
+    textAlign: "center",
+  },
+
   modalText: {
     fontSize: 15,
     color: "#065f46",
-    textAlign: "center",
+    textAlign: "left",
     marginVertical: 4,
   },
 

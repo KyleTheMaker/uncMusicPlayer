@@ -13,9 +13,6 @@ import { FlatList } from "react-native-gesture-handler";
  * Folder holding music can be selected
  * audio/mp3 files from folder will be listed
  * clicking will play selected file
- * TODO:
- *  - turn folder items into it's own playlist,
- * where the media play can go back and forth for songs
  *
  */
 

@@ -23,6 +23,8 @@ import {
   Gesture,
   GestureDetector,
   LongPressGesture,
+  PointerType,
+  MouseButton,
 } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -65,10 +67,10 @@ const MediaPlayer = () => {
 
   // play when song changed
   useEffect(() => {
-    if(currentSong.location){
-    player.replace(currentSong.location);
-    player.play();
-    setIsPlay(true);
+    if (currentSong.location) {
+      player.replace(currentSong.location);
+      player.play();
+      setIsPlay(true);
     }
   }, [currentSong]);
 
@@ -105,12 +107,46 @@ const MediaPlayer = () => {
     return value > 0 ? -delta : delta; // down = negative, up = positive
   };
 
+  {
+    /** Handle Mouse input for Gesture control */
+  }
+
+  const mouseTripleTap = Gesture.Tap()
+    .maxDelay(250)
+    .numberOfTaps(3)
+    .mouseButton(MouseButton.LEFT)
+    .onEnd(() => {
+      //Logic to go to previous song
+      changeTrack(-1);
+    });
+
+  const mouseDoubleTap = Gesture.Tap()
+    .maxDelay(250)
+    .numberOfTaps(2)
+    .mouseButton(MouseButton.LEFT)
+    .onEnd(() => {
+      // Logic to go to next song
+      changeTrack(1);
+    });
+
+  const mouseSingleTap = Gesture.Tap()
+    .numberOfTaps(1)
+    .mouseButton(MouseButton.LEFT)
+    .onEnd(() => {
+      // Logic for Pause/Play
+      handlePlayButton();
+    });
+
+  {
+    /** Handle user tap/general phone input for gesture control */
+  }
+
   const panGesture = Gesture.Pan()
     .onUpdate((e) => {
       const { translationX, translationY } = e;
 
       if (Math.abs(translationY) > Math.abs(translationX)) {
-        // Vertical swipe
+        // Vertical swipe for volume control
         setshowVolume(true);
         let normalizedY = calculateVolumeChanges(translationY);
 
@@ -122,13 +158,14 @@ const MediaPlayer = () => {
 
           return newVolume;
         });
+        player.volume = currentVolume;
       }
     })
     .onEnd((e) => {
       const { translationX, translationY } = e;
 
       if (Math.abs(translationX) > Math.abs(translationY)) {
-        // Horizontal swipe
+        // Horizontal swipe for track control
         if (translationX > 50) {
           changeTrack(1);
         } else if (translationX < -50) {
@@ -168,8 +205,7 @@ const MediaPlayer = () => {
     .numberOfTaps(2)
     .onStart(() => {
       setAdvancedModeEnabled((previousState) => !previousState);
-    }
-  );
+    });
 
   const pinchGesture = Gesture.Pinch().onUpdate((e) => {
     if (e.scale > 1) {
@@ -178,11 +214,15 @@ const MediaPlayer = () => {
   });
 
   const pinchAndPanGesture = Gesture.Simultaneous(pinchGesture, panGesture);
+
   const exclusiveGesture = Gesture.Exclusive(
+    mouseTripleTap,
+    mouseDoubleTap,
+    mouseSingleTap,
     pinchAndPanGesture,
     longPressGesture,
     doubleTap,
-    tapGesture
+    tapGesture,
   );
 
   const showHelp = () => {
@@ -194,16 +234,14 @@ const MediaPlayer = () => {
       <HelpModal showHelp={showHelpModal} closeHelp={setshowHelpModal} />
 
       <View style={styles.helpContainer}>
-        <Text style={{ fontWeight: "bold" }}>
-          Advanced Mode
-        </Text>
+        <Text style={{ fontWeight: "bold" }}>Advanced Mode</Text>
         <Pressable onPress={showHelp}>
           <Ionicons name={"help-circle-sharp"} size={24} />
         </Pressable>
       </View>
 
       <GestureDetector
-        gesture={advancedModeEnabled ? exclusiveGesture : doubleTap }
+        gesture={advancedModeEnabled ? exclusiveGesture : doubleTap}
       >
         <View style={styles.mediaPlayer}>
           <View style={styles.imageContainer}>
