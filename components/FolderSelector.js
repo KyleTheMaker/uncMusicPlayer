@@ -1,6 +1,5 @@
 import { Text, Button, Image, View, StyleSheet } from "react-native";
 import { useState, useEffect } from "react";
-import * as FileSystem from "expo-file-system/legacy";
 import { Directory, Paths, File } from "expo-file-system";
 import { useSongPlayer } from "../context/SongContext";
 import { addSongToPlaylist } from "../data/musicdb";
@@ -55,10 +54,7 @@ const FolderSelector = () => {
 
           const targetSong = new File(localMusicDirectory, safeName);
           if (!targetSong.exists) {
-            await FileSystem.copyAsync({
-              from: item.uri,
-              to: targetSong.uri,
-            });
+            await item.copy(targetSong);
           }
           return {
             name: item.name,
