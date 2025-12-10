@@ -1,6 +1,7 @@
 import { Text, Button, Image, View, StyleSheet } from "react-native";
 import { useState, useEffect } from "react";
 import { Directory, Paths, File } from "expo-file-system";
+import { copyAsync } from "expo-file-system/legacy";
 import { useSongPlayer } from "../context/SongContext";
 import { addSongToPlaylist } from "../data/musicdb";
 import { useSQLiteContext } from "expo-sqlite";
@@ -52,9 +53,16 @@ const FolderSelector = () => {
           const originalName = item.name;
           const safeName = originalName.replace(/[^\w\s\-\.]/g, "");
 
-          const targetSong = new File(localMusicDirectory, safeName);
+          let targetSong = new File(localMusicDirectory, safeName);
           if (!targetSong.exists) {
-            await item.copy(targetSong);
+            try {
+              await copyAsync({
+                from: item.uri,
+                to: targetSong.uri,
+              });
+            } catch (copyError) {
+              console.log(`Failed to copy ${originalName}`, copyError);
+            }
           }
           return {
             name: item.name,
@@ -89,7 +97,9 @@ const FolderSelector = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{chosenFolder ? `${chosenFolder} Folder Songs` : "No Folder Selected"}</Text>
+      <Text style={styles.title}>
+        {chosenFolder ? `${chosenFolder} Folder Songs` : "No Folder Selected"}
+      </Text>
       <Button
         title={loading ? "Loading..." : "Choose Folder"}
         onPress={chooseFolder}
