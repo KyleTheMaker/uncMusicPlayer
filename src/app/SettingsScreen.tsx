@@ -14,6 +14,7 @@ import {
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { MediaControlSelections } from "@/components/MediaControlSelections";
+import { ThemeStyleSelections } from "@/components/ThemeSelections";
 
 export default function SettingsScreen() {
   const [darkMode, setDarkMode] = useState(false);
@@ -35,6 +36,7 @@ export default function SettingsScreen() {
       </Text>
       
       <MediaControlSelections />
+      <ThemeStyleSelections />
 
 
       <StatusBar style={darkMode ? "light" : "dark"} />

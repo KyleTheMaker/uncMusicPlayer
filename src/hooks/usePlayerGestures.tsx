@@ -3,10 +3,6 @@
  * each type of gesture input: buttons, swipe gestures, tap gestures.
  * Future input types: voice command, visual gesture command
  * 
- * //TODO: Gesture handler conflict between "mouse" clicks and taps
- * separate the different control types so they can be activated individually
- * 
- * 
  */
 
 

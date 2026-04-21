@@ -1,11 +1,9 @@
-/** // TODO: Finish writing the Settings Context
 /**
  * This context connects choices from the settings menu to
  * properly reflect throughout the app.
  * Settings:
  *  - Media Control Options -
- * Button (T/F regardles of other controls), [BT Mouse, Touch Gesture, 
- * voice control, Camera Gesture] only one can be true at a time.
+ * BT Mouse, Touch Gesture, voice control, Camera Gesture only one can be true at a time.
  * 
  */
 

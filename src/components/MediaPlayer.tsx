@@ -106,11 +106,6 @@ const MediaPlayer = () => {
         </Pressable>
       </View>
 
-{
-/* //TODO: Mouse Buttons Play/Pause does not work - control should come from 
-//player Gesture Hook */
-}
-
       <GestureDetector gesture={activeGesture()} >
         <View style={styles.mediaPlayer}>
           <View style={styles.imageContainer}>
