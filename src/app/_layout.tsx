@@ -12,6 +12,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SongProvider } from "@/context/SongContext";
+import { ThemeProvider } from "@/context/ThemeContext";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { SQLiteProvider } from "expo-sqlite";
 import { Tabs } from "expo-router";
@@ -26,6 +27,7 @@ export default function App() {
         <SQLiteProvider databaseName="uncMusic.db" onInit={manageDBIfNeeded}>
             <MediaControlProvider>
             <SongProvider>
+                <ThemeProvider>
                 <Tabs>
                 <Tabs.Screen
                     name='index'
@@ -70,6 +72,7 @@ export default function App() {
                     }}
                 />
             </Tabs>
+            </ThemeProvider>
             </SongProvider>
           </MediaControlProvider>
         </SQLiteProvider>

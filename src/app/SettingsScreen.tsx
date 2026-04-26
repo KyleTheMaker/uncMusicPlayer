@@ -1,7 +1,6 @@
 /**
- * // TODO: THIS PAGE DOES NOTHING RELATIVE TO THE REST OF THE APP FIX THAT!
- *  - This should only contain broader components, refactor 
- * and simplify into more standard components
+ * // TODO: implement the dark/light mode control and remove
+ * previous darkmode references.
  */
 
 import React, { useState } from "react";
