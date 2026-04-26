@@ -1,8 +1,9 @@
 {
   "expo": {
-    "name": "uncMusicPlayer",
-    "slug": "uncMusicPlayer",
+    "name": "uncAudioPlayer",
+    "slug": "uncAudioPlayer",
     "version": "1.0.0",
+    "scheme": "uncaudioplayer",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
