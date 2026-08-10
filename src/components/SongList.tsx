@@ -13,6 +13,7 @@ import { useSQLiteContext } from "expo-sqlite";
 import { useState, useEffect } from "react";
 import { useSongPlayer } from "../context/SongContext";
 import { SongInfo } from "@/types/audio";
+import { useThemeStyles } from "@/context/ThemeContext";
 
 // import { getSongListSongs } from "../data/musicdb";
 import { addSongToPlaylist, getSongListSongs } from "@/data/musicdb";
@@ -23,6 +24,7 @@ const SongList = () => {
   const [songsList, setSongsList] = useState<SongInfo[]>([]);
   // const [playSong, setPlaySong] = useState("");
   const {playNewSong} = useSongPlayer();
+  const theme = useThemeStyles();
 
   //we're getting all songs from songlist table and display in flatlist
   useEffect(() => {
@@ -42,8 +44,8 @@ const SongList = () => {
   };
 
   return (
-    <View style={styles.playlist}>
-      <Text style={styles.title}>App Songs</Text>
+    <View style={[styles.playlist,{}]}>
+      <Text style={[styles.title, {color: theme.colors.textSecondary}]}>App Songs</Text>
       <FlatList
         data={songsList}
         renderItem={({ item, index }) => (
@@ -73,7 +75,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 8,
     fontSize: 20,
-    color: "#064e3b",
   },
 });
 

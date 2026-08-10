@@ -1,5 +1,6 @@
 import { SetStateAction, Dispatch } from "react";
 import { StyleSheet, Text, View, Pressable, Modal} from "react-native";
+import { useThemeStyles } from "@/context/ThemeContext";
 
 interface HelpModalProps {
   closeHelp: Dispatch<SetStateAction<boolean>>;
@@ -7,6 +8,7 @@ interface HelpModalProps {
 }
 
 const HelpModal = ({showHelp, closeHelp}: HelpModalProps) => {
+  const theme = useThemeStyles();
   return(
     <Modal
       transparent

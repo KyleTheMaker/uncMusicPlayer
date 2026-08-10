@@ -1,16 +1,18 @@
 import { View, Text, StyleSheet } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { useState, useContext } from "react";
 import { StatusBar } from "expo-status-bar";
 
 
 import PlayList from "@/components/PlayList";
+import { useTheme } from "@react-navigation/native";
+import { useThemeStyles } from "@/context/ThemeContext";
 
 export default function PlaylistScreen() {
+  const theme = useThemeStyles();
 
   return (
     <SafeAreaView
-      style={{ flex: 1, flexDirection: "column", overflow: "hidden" }}
+      style={{ flex: 1, flexDirection: "column", overflow: "hidden", backgroundColor: theme.colors.background }}
     >
       <PlayList />
 
@@ -22,7 +24,7 @@ export default function PlaylistScreen() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: "#f0fdfa",
+    backgroundColor: "#261a68",
   },
   container: {
     flex: 1,

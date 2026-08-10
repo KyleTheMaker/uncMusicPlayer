@@ -11,6 +11,7 @@
 import { SongInfo } from "@/types/audio";
 import { useState } from "react";
 import { Pressable, Text, Image, StyleSheet, View, Alert } from "react-native";
+import { useThemeStyles } from "@/context/ThemeContext";
 
 interface SongProps {
   playSong: (song:SongInfo) => void;
@@ -21,10 +22,11 @@ interface SongProps {
 
 const Song = ({playSong, actionFunction, actionText, songInfo}:SongProps) => {
   const [isVisible, setVisible] = useState(false);
+  const theme = useThemeStyles();
   return (
     <View>
       <Pressable
-        style={styles.songItem}
+        style={[styles.songItem, {backgroundColor: theme.colors.surface, borderColor: theme.colors.accent}]}
         onLongPress={() => {
           setVisible(!isVisible);
         }}
@@ -34,17 +36,17 @@ const Song = ({playSong, actionFunction, actionText, songInfo}:SongProps) => {
       >
         {isVisible && (
           <Pressable
-            style={styles.actionButton}
+            style={[styles.actionButton, {backgroundColor: theme.colors.surface, borderColor: theme.colors.accent}]}
             onPress={() => {
               actionFunction(songInfo);
               Alert.alert(actionText + " " + songInfo.name);
               setVisible(!isVisible);
             }}
           >
-            <Text style={styles.actionText}>{actionText}</Text>
+            <Text style={[styles.actionText, {color: theme.colors.textSecondary}]}>{actionText}</Text>
           </Pressable>
         )}
-        <Text style={styles.songName}>{songInfo.name}</Text>
+        <Text style={[styles.songName, {color: theme.colors.textPrimary}]}>{songInfo.name}</Text>
       </Pressable>
     </View>
   );
@@ -52,13 +54,11 @@ const Song = ({playSong, actionFunction, actionText, songInfo}:SongProps) => {
 
 const styles = StyleSheet.create({
   songItem: {
-    backgroundColor: "#ecfdf5",
     paddingVertical: 10,
     paddingHorizontal: 12,
     margin: 4,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#a7f3d0",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",

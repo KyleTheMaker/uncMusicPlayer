@@ -12,13 +12,15 @@ import { addSongToPlaylist } from "@/data/musicdb";
 import { useSQLiteContext } from "expo-sqlite";
 import { SongInfo } from "@/types/audio";
 import { useFolderScanner } from "@/hooks/useFolderScanner";
+import { useThemeStyles } from "@/context/ThemeContext";
 
 import Song from "./Song";
 
 const FolderSelector = () => {
   const { songs, loading, folderName, chooseFolder } = useFolderScanner();
   const { playNewSong } = useSongPlayer();
-  const db = useSQLiteContext();  
+  const db = useSQLiteContext();
+  const theme = useThemeStyles();
 
   const handleAddSong = async (songItem: SongInfo) => {
     try {
@@ -43,10 +45,10 @@ const FolderSelector = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
+      <Text style={[styles.title,{color: theme.colors.textPrimary}]}>
         {folderName ? `${folderName} Folder` : "No Folder Selected"}
       </Text>
-      <Text>Select the music folder on your phone!</Text>
+      <Text style= {{color: theme.colors.textSecondary, textAlign: "center"}}>Select the music folder on your phone!</Text>
       <Button
         title={loading ? "Loading..." : "Choose Folder"}
         onPress={chooseFolder}
@@ -83,7 +85,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 8,
     fontSize: 20,
-    color: "#064e3b",
   },
 });
 

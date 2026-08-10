@@ -10,6 +10,7 @@
 import { StyleSheet, Text, View, Pressable, Alert } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { ComponentProps, Dispatch, SetStateAction } from "react";
+import { useThemeStyles } from "@/context/ThemeContext";
 
 interface MediaButtonProps {
   pressOut: () => void;
@@ -18,10 +19,11 @@ interface MediaButtonProps {
 }
 
 const MediaButton = ({pressOut, icon, size}: MediaButtonProps) => {
+  const theme = useThemeStyles();
   return (
     <View>
-      <Pressable style={styles.pressBtn} onPressOut={pressOut}>
-        <Ionicons name={icon} size={size} color="#064e3b" />
+      <Pressable style={[styles.pressBtn,{ backgroundColor: theme.colors.surface, shadowColor: theme.colors.accent}]} onPressOut={pressOut}>
+        <Ionicons name={icon} size={size} color={theme.colors.accent} />
       </Pressable>
     </View>
   );
@@ -32,11 +34,8 @@ const styles = StyleSheet.create({
     margin: 8,
     padding: 8,
     borderRadius: 40,
-
-    backgroundColor: "#a7f3d0",
-    shadowColor: "#0d9488",
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
+    shadowOpacity: 0.8,
     shadowRadius: 8,
     elevation: 6,
   },

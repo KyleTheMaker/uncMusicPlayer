@@ -4,10 +4,12 @@
 import { Text, View } from "react-native";
 import { useMediaControls } from "@/context/MediaControlContext";
 import { Picker } from "@react-native-picker/picker";
+import { useThemeStyles } from "@/context/ThemeContext";
 
 
 export const MediaControlSelections = () => {
     const {mediaControls, setMediaControls} = useMediaControls();
+    const theme = useThemeStyles();
 
     const getSelectedControl = () => {
         if(mediaControls.GestureControl) return "swipe";
@@ -26,11 +28,11 @@ export const MediaControlSelections = () => {
 
     return (
         <View style={{flexDirection:'row', alignItems:'center'}}>
-            <Text style={{flex:1, fontSize:16,}}> Media Controls </Text>
+            <Text style={{flex:1, fontSize:16, color: theme.colors.textPrimary}}> Media Controls </Text>
             <Picker
                 selectedValue={getSelectedControl()}
-                style={{color:"black", flex: 1}}
-                dropdownIconColor={"black"}
+                style={{color: theme.colors.textPrimary, flex: 1}}
+                dropdownIconColor={theme.colors.textPrimary}
                 onValueChange={handleValueChange}>
                 <Picker.Item label="Button" value="button" />
                 <Picker.Item label="Swipe" value="swipe" />

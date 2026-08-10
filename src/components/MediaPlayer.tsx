@@ -17,15 +17,18 @@ import Slider from "@react-native-community/slider";
 import { GestureDetector } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
 import { usePlayerGestures } from "@/hooks/usePlayerGestures";
+import { useThemeStyles } from "@/context/ThemeContext";
 
 import HelpModal from "@/components/HelpModal";
 import MediaButton from "@/components/MediaButton";
 import { useSongPlayer } from "@/context/SongContext";
 import { useMediaControls } from "@/context/MediaControlContext";
+import { useTheme } from "@react-navigation/native";
 
 const MediaPlayer = () => {
   const { currentSong, changeTrack} = useSongPlayer();
   const { mediaControls } = useMediaControls();
+  const theme = useThemeStyles();
 
   const [isPlay, setIsPlay] = useState(true);
   const [showHelpModal, setshowHelpModal] = useState(false);
@@ -100,9 +103,9 @@ const MediaPlayer = () => {
       <HelpModal showHelp={showHelpModal} closeHelp={setshowHelpModal} />
 
       <View style={styles.helpContainer}>
-        <Text style={{ fontWeight: "bold" }}>Advanced Mode</Text>
+        <Text style={[styles.advancedLabel,{ color: theme.colors.textPrimary }]}>Advanced Mode</Text>
         <Pressable onPress={showHelp}>
-          <Ionicons name={"help-circle-sharp"} size={24} />
+          <Ionicons style={{color: theme.colors.textPrimary}} name={"help-circle-sharp"} size={24} />
         </Pressable>
       </View>
 
@@ -113,7 +116,7 @@ const MediaPlayer = () => {
           </View>
 
           <View style={styles.musicBarContainer}>
-            <Text style={{ opacity: showVolume ? 1 : 0 }}>
+            <Text style={[styles.volumeText,{ opacity: showVolume ? 1 : 0, color: theme.colors.textPrimary }]}>
               Volume: {Math.round(currentVolume * 100)}%
             </Text>
             <View
@@ -123,8 +126,8 @@ const MediaPlayer = () => {
                 width: "100%",
               }}
             >
-              <Text>{currentTime}</Text>
-              <Text>{formattedSongDuration}</Text>
+              <Text style={[styles.timeText, {color: theme.colors.textPrimary}]}>{currentTime}</Text>
+              <Text style={[styles.timeText, {color: theme.colors.textPrimary}]}>{formattedSongDuration}</Text>
             </View>
             <Slider
               style={{ width: "100%", margin: 5 }}
@@ -133,10 +136,10 @@ const MediaPlayer = () => {
               step={1}
               value={status}
               onSlidingComplete={(value) => player.seekTo(value)}
-              minimumTrackTintColor="#2e3299ff"
-              maximumTrackTintColor="#000000"
+              minimumTrackTintColor= {theme.colors.accent}
+              maximumTrackTintColor={theme.colors.background}
             />
-            <Text style={{ fontSize: 30, textAlign: "center", margin: 5 }}>
+            <Text style={[styles.songTitle, {color: theme.colors.textPrimary}]}>
               {currentSong.name}
             </Text>
           </View>
@@ -175,7 +178,6 @@ const MediaPlayer = () => {
 const styles = StyleSheet.create({
   mediaPlayer: {
     flex: 1,
-    // padding: 12,
   },
   helpContainer: {
     flexDirection: "row",
@@ -209,7 +211,6 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   volumeText: {
-    color: "#0f766e",
     fontWeight: "600",
     marginBottom: 4,
   },
@@ -220,7 +221,6 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   timeText: {
-    color: "#065f46",
     fontSize: 13,
   },
   slider: {
@@ -232,7 +232,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 6,
     fontWeight: "700",
-    color: "#022c22",
   },
   buttonContainer: {
     flex: 1,

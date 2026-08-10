@@ -7,21 +7,20 @@
  * Text Secondary color is for supporting text
  */
 
-export const Colors = {
-    light: {
+export const light = {
         background: '#ace9f7',
         surface: '#82ddf0',
         primary: '#6ecadd',
         textPrimary: '#000',
         textSecondary: '#383838',
-        accent: '#7eead0'
-    },
-    dark: {
-        background: '#07381f',
-        surface: '#163e19',
-        primary: '#11465f',
-        textPrimary: '#fff',
-        textSecondary: '#d1cfcf',
-        accent: '#3e470c'
-    }
+        accent: '#559888'
+}
+
+export const dark = {
+    background: '#0b161c',
+    surface: '#162730',
+    primary: '#6ecadd',
+    textPrimary: '#e4eff2',
+    textSecondary: '#8ea3ad',
+    accent: '#7eead0'
 }

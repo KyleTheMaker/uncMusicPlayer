@@ -8,34 +8,33 @@ import { Picker } from "@react-native-picker/picker";
 
 export const ThemeStyleSelections = () => {
     const {themeStyle, setThemeStyle} = useThemeStyles();
+    const theme = useThemeStyles();
 
     const getSelectedTheme = () => {
-        if(themeStyle.light) return "light";
-        if(themeStyle.dark) return "dark";
-        if(themeStyle.sysDefault) return "sysDefault";
+        return themeStyle;
     }
 
     const handleValueChange = (itemValue: string) => {
         if(itemValue === "light"){
-            setThemeStyle({light: true, dark: false, sysDefault: false});
+            setThemeStyle("light");
         }else if(itemValue === "dark"){
-            setThemeStyle({light: false, dark: true, sysDefault: false});
+            setThemeStyle("dark");
         }else if(itemValue === "sysDefault"){
-            setThemeStyle({light: false, dark: false, sysDefault: true});
+            setThemeStyle("system");
         }
     }
 
     return (
         <View style={{flexDirection:'row', alignItems:'center'}}>
-            <Text style={{flex:1, fontSize:16,}}> Media Controls </Text>
+            <Text style={{flex:1, fontSize:16, color: theme.colors.textPrimary}}> Theme Style </Text>
             <Picker
                 selectedValue={getSelectedTheme()}
-                style={{color:"black", flex: 1}}
-                dropdownIconColor={"black"}
+                style={{color: theme.colors.textPrimary, flex: 1}}
+                dropdownIconColor={theme.colors.textPrimary}
                 onValueChange={handleValueChange}>
                 <Picker.Item label="Light" value="light" />
                 <Picker.Item label="Dark" value="dark" />
-                <Picker.Item label="Device Default" value="sysDefault" />
+                <Picker.Item label="Device Default" value="system" />
             </Picker>
         </View>
     );

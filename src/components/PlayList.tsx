@@ -14,6 +14,7 @@ import { getPlayListSongs, removeSongFromPlaylist } from "@/data/musicdb";
 import { useFocusEffect } from "@react-navigation/native";
 import { useSongPlayer } from "@/context/SongContext";
 import { SongInfo } from "@/types/audio";
+import { useThemeStyles } from "@/context/ThemeContext";
 
 import Song from "./Song";
 
@@ -21,6 +22,7 @@ const PlayList = () => {
   const db = useSQLiteContext();
   const [songsList, setSongsList] = useState<SongInfo[]>([]);
   const { playNewSong } = useSongPlayer();
+  const theme = useThemeStyles();
 
   //we're getting all songs from playlist table to display in a flatlist
   // useEffect(() => {
@@ -56,7 +58,7 @@ const PlayList = () => {
 
   return (
     <View style={styles.playlist}>
-      <Text style={styles.title}>Playlist</Text>
+      <Text style={[styles.title, {color: theme.colors.textPrimary}]}>Playlist</Text>
       <FlatList
         style={{ flex: 1 }}
         data={songsList}
@@ -88,7 +90,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 8,
     fontSize: 20,
-    color: "#064e3b",
   },
   addRemove: {
     marginEnd: 2,

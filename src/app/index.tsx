@@ -7,15 +7,18 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useThemeStyles } from "@/context/ThemeContext";
 
 import SongList from "../components/SongList";
 import FolderSelector from "../components/FolderSelector";
 
 export default function App() {
 
+  const theme = useThemeStyles();
+
   return (
     <SafeAreaView
-      style={styles.screen}
+      style={[styles.screen,{backgroundColor: theme.colors.background}]}
     >
       <View style={styles.container}>
         <Header />
@@ -32,10 +35,11 @@ export default function App() {
 }
 
 const Header = () => {
+  const theme = useThemeStyles();
   return (
-    <View style={styles.headerWrapper}>
+    <View style={[styles.headerWrapper,{backgroundColor: theme.colors.primary}]}>
       <Text
-        style={styles.headerTitle}
+        style={[styles.headerTitle, {color: theme.colors.textPrimary}]}
       >
         uncMusicPlayer
       </Text>
@@ -46,7 +50,6 @@ const Header = () => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: "#f0fdfa",
   },
   container: {
     paddingBottom: 10,
@@ -60,7 +63,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     paddingVertical: 16,
     borderRadius: 18,
-    backgroundColor: "#a7f3d0",
     shadowColor: "#0d9488",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
@@ -73,7 +75,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "800",
     letterSpacing: 0.8,
-    color: "#064e3b",
     textTransform: "uppercase",
   },
   content: {
